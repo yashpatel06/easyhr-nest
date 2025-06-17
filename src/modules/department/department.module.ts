@@ -13,5 +13,6 @@ import { DepartmentService } from './department.service';
   ],
   providers: [DepartmentService],
   controllers: [DepartmentContoller],
+  exports: [DepartmentService],
 })
 export class DeparatmentModule {}

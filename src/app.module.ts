@@ -7,6 +7,7 @@ import { UsersModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RoleModule } from './modules/role/role.module';
 import { DeparatmentModule } from './modules/department/department.module';
+import { DesignationModule } from './modules/designation/designation.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { DeparatmentModule } from './modules/department/department.module';
     AuthModule,
     RoleModule,
     DeparatmentModule,
+    DesignationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

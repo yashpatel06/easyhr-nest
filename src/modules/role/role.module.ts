@@ -17,5 +17,6 @@ import { clearScreenDown } from 'readline';
   ],
   providers: [RoleService],
   controllers: [RoleController],
+  exports: [RoleService],
 })
 export class RoleModule {}
