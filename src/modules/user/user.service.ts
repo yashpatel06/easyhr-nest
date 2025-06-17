@@ -30,12 +30,7 @@ export class UsersService {
   async deleteUser(id: string) {
     return this.userModel.findByIdAndUpdate(
       id,
-      {
-        $set: {
-          isActive: false,
-          isDeleted: true,
-        },
-      },
+      { $set: { isActive: false, isDeleted: true } },
       { new: true },
     );
   }

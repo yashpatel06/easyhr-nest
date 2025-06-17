@@ -5,6 +5,8 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { RoleModule } from './modules/role/role.module';
+import { DeparatmentModule } from './modules/department/department.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { AuthModule } from './modules/auth/auth.module';
     }),
     UsersModule,
     AuthModule,
+    RoleModule,
+    DeparatmentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
