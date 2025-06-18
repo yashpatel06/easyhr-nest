@@ -30,11 +30,16 @@ export class DesignationService {
     return this.designationModel.findByIdAndUpdate(id, data, { new: true });
   }
 
-  async deleteDesignation(id: string) {
+  async deleteDesignation(id: string, user: any) {
     return this.designationModel.findByIdAndUpdate(
       id,
       {
-        $set: { isActive: false, isDeleted: true },
+        $set: {
+          isActive: false,
+          isDeleted: true,
+          deletedBy: user?._id,
+          deletedAt: new Date(),
+        },
       },
       { new: true },
     );

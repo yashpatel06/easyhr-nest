@@ -3,6 +3,7 @@ import {
   Controller,
   Param,
   Post,
+  Request,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -28,7 +29,8 @@ export class DepartmentContoller {
 
   @Post(PATH.create)
   @UsePipes(new ValidationPipe())
-  async createDepartmetn(@Body() data: CreateDepartmentDto) {
+  async createDepartmetn(@Body() data: CreateDepartmentDto, @Request() req) {
+    const user = req?.user;
     const oldData = await this.departmentService.getDepartment({
       name: data?.name,
       isActive: true,
@@ -42,6 +44,7 @@ export class DepartmentContoller {
       );
     }
 
+    data.createdBy = user?._id;
     const newData = await this.departmentService.createDepartment(data);
 
     return ResponseUtilities.responseWrapper(
@@ -67,7 +70,10 @@ export class DepartmentContoller {
   async editDepartment(
     @Param('id') id: string,
     @Body() data: EditDepartmentDto,
+    @Request() req,
   ) {
+    const user = req?.user;
+    data.updatedBy = user?._id;
     const updateDepartment = await this.departmentService.editDepartment(
       id,
       data,
@@ -89,8 +95,9 @@ export class DepartmentContoller {
   }
 
   @Post(PATH.delete)
-  async deleteDepartment(@Param('id') id: string) {
-    const deleteData = await this.departmentService.deleteDepartment(id);
+  async deleteDepartment(@Param('id') id: string, @Request() req) {
+    const user = req?.user;
+    const deleteData = await this.departmentService.deleteDepartment(id, user);
     if (!deleteData) {
       return ResponseUtilities.responseWrapper(
         false,

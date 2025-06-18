@@ -1,4 +1,4 @@
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsMongoId, IsOptional, IsString } from 'class-validator';
 
 export class EditUserDto {
   @IsString()
@@ -13,4 +13,8 @@ export class EditUserDto {
 
   @IsString()
   role: string;
+
+  @IsMongoId()
+  @IsOptional()
+  updatedBy: string;
 }

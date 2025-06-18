@@ -3,6 +3,7 @@ import {
   Controller,
   Param,
   Post,
+  Request,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -35,7 +36,8 @@ export class DesignationContoller {
 
   @Post(PATH.create)
   @UsePipes(new ValidationPipe())
-  async createDesignation(@Body() data: CreateDesignationDto) {
+  async createDesignation(@Body() data: CreateDesignationDto, @Request() req) {
+    const user = req?.user;
     const roleData = await this.roleService.getRole({
       _id: new mongoose.Types.ObjectId(data.roleId),
       isActive: true,
@@ -77,6 +79,7 @@ export class DesignationContoller {
       );
     }
 
+    data.createdBy = user?._id;
     const newData = await this.designationService.createDesignation(data);
     return ResponseUtilities.responseWrapper(
       true,
@@ -102,7 +105,9 @@ export class DesignationContoller {
   async editDesignation(
     @Param('id') id: string,
     @Body() data: EditDesignationDto,
+    @Request() req,
   ) {
+    const user = req?.user;
     const roleData = await this.roleService.getRole({
       _id: new mongoose.Types.ObjectId(data?.roleId),
       isActive: true,
@@ -129,6 +134,7 @@ export class DesignationContoller {
       );
     }
 
+    data.updatedBy = user?._id;
     const updateDesignation = await this.designationService.editDesignation(
       id,
       data,
@@ -150,8 +156,12 @@ export class DesignationContoller {
   }
 
   @Post(PATH.delete)
-  async deleteDesignation(@Param('id') id: string) {
-    const deleteData = await this.designationService.deleteDesignation(id);
+  async deleteDesignation(@Param('id') id: string, @Request() req) {
+    const user = req?.user;
+    const deleteData = await this.designationService.deleteDesignation(
+      id,
+      user,
+    );
     if (!deleteData) {
       return ResponseUtilities.responseWrapper(
         false,

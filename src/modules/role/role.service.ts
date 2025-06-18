@@ -29,10 +29,17 @@ export class RoleService {
     return this.roleModel.findByIdAndUpdate(id, data, { new: true });
   }
 
-  async deleteRole(id: string) {
+  async deleteRole(id: string, user: any) {
     return this.roleModel.findByIdAndUpdate(
       id,
-      { $set: { isActive: false, isDeleted: true } },
+      {
+        $set: {
+          isActive: false,
+          isDeleted: true,
+          deletedBy: user?._id,
+          deletedAt: new Date(),
+        },
+      },
       { new: true },
     );
   }

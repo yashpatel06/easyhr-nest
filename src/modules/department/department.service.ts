@@ -30,10 +30,17 @@ export class DepartmentService {
     return this.departmentModel.findByIdAndUpdate(id, data, { new: true });
   }
 
-  async deleteDepartment(id: string) {
+  async deleteDepartment(id: string, user: any) {
     return this.departmentModel.findByIdAndUpdate(
       id,
-      { $set: { isActive: false, isDeleted: true } },
+      {
+        $set: {
+          isActive: false,
+          isDeleted: true,
+          deletedBy: user?._id,
+          deletedAt: new Date(),
+        },
+      },
       { new: true },
     );
   }

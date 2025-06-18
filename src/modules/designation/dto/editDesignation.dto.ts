@@ -1,4 +1,4 @@
-import { IsMongoId, IsString } from 'class-validator';
+import { IsMongoId, IsOptional, IsString } from 'class-validator';
 
 export class EditDesignationDto {
   @IsString()
@@ -12,4 +12,8 @@ export class EditDesignationDto {
 
   @IsMongoId()
   departmentId: string;
+
+  @IsMongoId()
+  @IsOptional()
+  updatedBy: string;
 }

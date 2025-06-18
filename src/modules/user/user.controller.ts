@@ -3,6 +3,7 @@ import {
   Controller,
   Param,
   Post,
+  Request,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -31,7 +32,8 @@ export class UsersController {
 
   @Post(PATH.create)
   @UsePipes(new ValidationPipe())
-  async createUser(@Body() userData: CreateUserDto) {
+  async createUser(@Body() userData: CreateUserDto, @Request() req) {
+    const user = req?.user;
     const oldUser = await this.userService.getUser({
       email: userData.email,
       isActive: true,
@@ -50,6 +52,7 @@ export class UsersController {
       plainPassword ?? '',
     );
     userData.password = hashPassword;
+    userData.createdBy = user?._id;
     const data = await this.userService.createUser(userData);
     return ResponseUtilities.responseWrapper(
       true,
@@ -72,7 +75,13 @@ export class UsersController {
 
   @Post(PATH.edit)
   @UsePipes(new ValidationPipe())
-  async editUser(@Param('id') id: string, @Body() editUser: EditUserDto) {
+  async editUser(
+    @Param('id') id: string,
+    @Body() editUser: EditUserDto,
+    @Request() req,
+  ) {
+    const user = req?.user;
+    editUser.updatedBy = user?._id;
     const updateUser = await this.userService.editUser(id, editUser);
     if (!updateUser) {
       return ResponseUtilities.responseWrapper(
@@ -91,8 +100,9 @@ export class UsersController {
   }
 
   @Post(PATH.delete)
-  async deleteUser(@Param('id') id: string) {
-    const deleteUser = await this.userService.deleteUser(id);
+  async deleteUser(@Param('id') id: string, @Request() req) {
+    const user = req?.user;
+    const deleteUser = await this.userService.deleteUser(id, user);
     if (!deleteUser) {
       return ResponseUtilities.responseWrapper(
         false,

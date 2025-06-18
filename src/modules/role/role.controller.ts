@@ -3,6 +3,7 @@ import {
   Controller,
   Param,
   Post,
+  Request,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -28,7 +29,8 @@ export class RoleController {
 
   @Post(PATH.create)
   @UsePipes(new ValidationPipe())
-  async createRole(@Body() data: CreateRoleDto) {
+  async createRole(@Body() data: CreateRoleDto, @Request() req) {
+    const user = req.user;
     const oldData = await this.roleService.getRole({
       name: data?.name,
       isActive: true,
@@ -42,6 +44,7 @@ export class RoleController {
       );
     }
 
+    data.createdBy = user?._id;
     const roleData = await this.roleService.createRole(data);
 
     return ResponseUtilities.responseWrapper(
@@ -65,7 +68,13 @@ export class RoleController {
 
   @Post(PATH.edit)
   @UsePipes(new ValidationPipe())
-  async editRole(@Param('id') id: string, @Body() data: EditRoleDto) {
+  async editRole(
+    @Param('id') id: string,
+    @Body() data: EditRoleDto,
+    @Request() req,
+  ) {
+    const user = req.user;
+    data.updatedBy = user?._id;
     const updateRole = await this.roleService.editRole(id, data);
     if (!updateRole) {
       return ResponseUtilities.responseWrapper(
@@ -84,8 +93,9 @@ export class RoleController {
   }
 
   @Post(PATH.delete)
-  async deleteRole(@Param('id') id: string) {
-    const deleteRole = await this.roleService.deleteRole(id);
+  async deleteRole(@Param('id') id: string, @Request() req) {
+    const user = req.user;
+    const deleteRole = await this.roleService.deleteRole(id, user);
     if (!deleteRole) {
       return ResponseUtilities.responseWrapper(
         false,

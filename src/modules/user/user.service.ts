@@ -27,10 +27,17 @@ export class UsersService {
     return this.userModel.findByIdAndUpdate(id, editUser, { new: true });
   }
 
-  async deleteUser(id: string) {
+  async deleteUser(id: string, user: any) {
     return this.userModel.findByIdAndUpdate(
       id,
-      { $set: { isActive: false, isDeleted: true } },
+      {
+        $set: {
+          isActive: false,
+          isDeleted: true,
+          deletedBy: user?._id,
+          deletedAt: new Date(),
+        },
+      },
       { new: true },
     );
   }

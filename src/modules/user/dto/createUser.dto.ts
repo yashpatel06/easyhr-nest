@@ -49,4 +49,8 @@ export class CreateUserDto {
   @IsString()
   @IsOptional()
   profilePic: string;
+
+  @IsMongoId()
+  @IsOptional()
+  createdBy: string;
 }
