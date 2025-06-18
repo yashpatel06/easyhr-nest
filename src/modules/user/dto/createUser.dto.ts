@@ -1,4 +1,10 @@
-import { IsEmail, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsMongoId,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -9,8 +15,38 @@ export class CreateUserDto {
   email: string;
 
   @IsString()
+  @IsNotEmpty()
   password: string;
 
   @IsString()
-  role: string;
+  contactNo: string;
+
+  @IsMongoId()
+  roleId: string;
+
+  @IsMongoId()
+  departmentId: string;
+
+  @IsMongoId()
+  designationId: string;
+
+  @IsString()
+  @IsOptional()
+  gender: String;
+
+  @IsString()
+  @IsOptional()
+  dob: Date;
+
+  @IsString()
+  @IsOptional()
+  dateOfJoining: Date;
+
+  @IsString()
+  @IsOptional()
+  address: string;
+
+  @IsString()
+  @IsOptional()
+  profilePic: string;
 }

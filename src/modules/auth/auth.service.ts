@@ -10,6 +10,10 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 
+  verifyToken(token: string): any {
+    return this.jwtService.verify(token);
+  }
+
   async hashPassword(plainPassword: string) {
     try {
       const salt = await bcrypt.genSalt(10);

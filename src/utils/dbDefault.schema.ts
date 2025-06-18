@@ -4,6 +4,9 @@ import { COLLECTIONS } from './common';
 
 @Schema()
 export class DbDefaultFields {
+  @Prop({ type: mongoose.Schema.ObjectId, auto: true })
+  _id?: mongoose.Schema.Types.ObjectId;
+
   @Prop({ default: true })
   isActive: boolean;
 

@@ -1,6 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, PipelineStage } from 'mongoose';
 import { COLLECTIONS } from 'src/utils/common';
 import { User } from './user.schema';
 import { CreateUserDto } from './dto/createUser.dto';
@@ -33,5 +33,9 @@ export class UsersService {
       { $set: { isActive: false, isDeleted: true } },
       { new: true },
     );
+  }
+
+  async aggregate(pipeline: PipelineStage[]) {
+    return this.userModel.aggregate(pipeline);
   }
 }

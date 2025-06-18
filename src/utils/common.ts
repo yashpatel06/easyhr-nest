@@ -16,3 +16,8 @@ export const ROLES = {
   Admin: 'Admin',
   User: 'User',
 };
+
+export const EGender = {
+  Male: 'male',
+  Female: 'female',
+};
