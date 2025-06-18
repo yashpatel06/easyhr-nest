@@ -4,6 +4,7 @@ import {
   Param,
   Post,
   Request,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ import { ResponseUtilities } from 'src/utils/response.util';
 import { COMMON_MESSAGE } from 'src/utils/message.enum';
 import { CreateUserDto } from './dto/createUser.dto';
 import { EditUserDto } from './dto/editUser.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 enum PATH {
   main = 'user',
@@ -23,6 +25,7 @@ enum PATH {
   delete = 'delete/:id',
 }
 
+@UseGuards(AuthGuard)
 @Controller(PATH.main)
 export class UsersController {
   constructor(
