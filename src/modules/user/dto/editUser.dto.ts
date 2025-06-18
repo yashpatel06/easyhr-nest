@@ -1,4 +1,10 @@
-import { IsEmail, IsMongoId, IsOptional, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsMongoId,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class EditUserDto {
   @IsString()
@@ -9,10 +15,36 @@ export class EditUserDto {
   email: string;
 
   @IsString()
-  password: string;
+  contactNo: string;
+
+  @IsMongoId()
+  roleId: string;
+
+  @IsMongoId()
+  departmentId: string;
+
+  @IsMongoId()
+  designationId: string;
 
   @IsString()
-  role: string;
+  @IsOptional()
+  gender: String;
+
+  @IsString()
+  @IsOptional()
+  dob: Date;
+
+  @IsString()
+  @IsOptional()
+  dateOfJoining: Date;
+
+  @IsString()
+  @IsOptional()
+  address: string;
+
+  @IsString()
+  @IsOptional()
+  profilePic: string;
 
   @IsMongoId()
   @IsOptional()
