@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { COLLECTIONS } from 'src/utils/common';
 import { DesignationSchema } from './designation.schema';
@@ -7,6 +7,8 @@ import { DesignationContoller } from './designation.controller';
 import { RoleService } from '../role/role.service';
 import { RoleModule } from '../role/role.module';
 import { DeparatmentModule } from '../department/department.module';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -16,10 +18,11 @@ import { DeparatmentModule } from '../department/department.module';
         schema: DesignationSchema,
       },
     ]),
-    RoleModule,
-    DeparatmentModule,
+    forwardRef(() => AuthModule),
+    forwardRef(() => RoleModule),
+    forwardRef(() => DeparatmentModule),
   ],
-  providers: [DesignationService],
+  providers: [DesignationService, AuthGuard],
   controllers: [DesignationContoller],
 })
 export class DesignationModule {}

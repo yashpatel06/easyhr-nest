@@ -3,6 +3,7 @@ import {
   Controller,
   Param,
   Post,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -11,6 +12,7 @@ import { CreateDepartmentDto } from './dto/createDepartment.dto';
 import { ResponseUtilities } from 'src/utils/response.util';
 import { COMMON_MESSAGE } from 'src/utils/message.enum';
 import { EditDepartmentDto } from './dto/editDepartment.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 enum PATH {
   main = 'department',
@@ -19,7 +21,7 @@ enum PATH {
   edit = 'edit/:id',
   delete = 'delete/:id',
 }
-
+@UseGuards(AuthGuard)
 @Controller(PATH.main)
 export class DepartmentContoller {
   constructor(private departmentService: DepartmentService) {}

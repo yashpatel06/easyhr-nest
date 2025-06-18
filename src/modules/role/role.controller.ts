@@ -3,6 +3,7 @@ import {
   Controller,
   Param,
   Post,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -11,6 +12,7 @@ import { ResponseUtilities } from 'src/utils/response.util';
 import { COMMON_MESSAGE } from 'src/utils/message.enum';
 import { CreateRoleDto } from './dto/createRole.dto';
 import { EditRoleDto } from './dto/editRole.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 enum PATH {
   main = 'role',
@@ -19,7 +21,7 @@ enum PATH {
   edit = 'edit/:id',
   delete = 'delete/:id',
 }
-
+@UseGuards(AuthGuard)
 @Controller(PATH.main)
 export class RoleController {
   constructor(private roleService: RoleService) {}

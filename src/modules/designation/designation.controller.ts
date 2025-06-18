@@ -3,6 +3,7 @@ import {
   Controller,
   Param,
   Post,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ import { RoleService } from '../role/role.service';
 import { DepartmentService } from '../department/department.service';
 import mongoose from 'mongoose';
 import { EditDesignationDto } from './dto/editDesignation.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 enum PATH {
   main = 'designation',
@@ -22,7 +24,7 @@ enum PATH {
   edit = 'edit/:id',
   delete = 'delete/:id',
 }
-
+@UseGuards(AuthGuard)
 @Controller(PATH.main)
 export class DesignationContoller {
   constructor(
