@@ -38,18 +38,6 @@ export class DesignationContoller {
   @UsePipes(new ValidationPipe())
   async createDesignation(@Body() data: CreateDesignationDto, @Request() req) {
     const user = req?.user;
-    const roleData = await this.roleService.getRole({
-      _id: new mongoose.Types.ObjectId(data.roleId),
-      isActive: true,
-      isDeleted: false,
-    });
-    if (!roleData) {
-      return ResponseUtilities.responseWrapper(
-        false,
-        COMMON_MESSAGE.NotFound.replace('{param}', 'Role'),
-        404,
-      );
-    }
 
     const departmentData = await this.departmentService.getDepartment({
       _id: new mongoose.Types.ObjectId(data?.departmentId),
@@ -66,7 +54,6 @@ export class DesignationContoller {
 
     const oldDesignation = await this.designationService.getDesignation({
       name: data?.name,
-      roleId: new mongoose.Types.ObjectId(data?.roleId),
       departmentId: new mongoose.Types.ObjectId(data?.departmentId),
       isActive: true,
       isDeleted: false,
@@ -108,19 +95,6 @@ export class DesignationContoller {
     @Request() req,
   ) {
     const user = req?.user;
-    const roleData = await this.roleService.getRole({
-      _id: new mongoose.Types.ObjectId(data?.roleId),
-      isActive: true,
-      isDeleted: false,
-    });
-    if (!roleData) {
-      return ResponseUtilities.responseWrapper(
-        false,
-        COMMON_MESSAGE.NotFound.replace('{param}', 'Role'),
-        404,
-      );
-    }
-
     const departmentData = await this.departmentService.getDepartment({
       _id: new mongoose.Types.ObjectId(data?.departmentId),
       isActive: true,
