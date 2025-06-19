@@ -14,15 +14,10 @@ export const COLLECTIONS = {
   Designation: 'designation',
 };
 
-export const ROLES = {
-  Admin: 'Admin',
-  User: 'User',
-};
-
-export const EGender = {
-  Male: 'male',
-  Female: 'female',
-};
+export enum EGender {
+  Male = 'male',
+  Female = 'female',
+}
 
 export enum EUserType {
   System = 'System',

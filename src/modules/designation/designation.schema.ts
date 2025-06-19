@@ -14,7 +14,7 @@ export class Designation extends DbDefaultFields {
   @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.Department })
   departmentId: MongooseSchema.Types.ObjectId;
 
-  @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.RoleMaster })
+  @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.Company })
   companyId: MongooseSchema.Types.ObjectId;
 }
 

@@ -22,6 +22,9 @@ export class User extends DbDefaultFields {
   @Prop()
   contactNo: string;
 
+  @Prop()
+  alternateContactNo: string;
+
   @Prop({ type: String, enum: EUserType, default: EUserType.Client })
   userType: string;
 
@@ -44,12 +47,33 @@ export class User extends DbDefaultFields {
   dateOfJoining: Date;
 
   @Prop()
-  address: string;
+  currentAddress: string;
 
   @Prop()
-  profilePic: string;
+  currentCity: string;
 
-  @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.Designation })
+  @Prop()
+  currentState: string;
+
+  @Prop()
+  currentPincode: string;
+
+  @Prop()
+  permanentAddress: string;
+
+  @Prop()
+  permanentCity: string;
+
+  @Prop()
+  permanentState: string;
+
+  @Prop()
+  permanentPincode: string;
+
+  @Prop()
+  profilePicture: string;
+
+  @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.Company })
   companyId: MongooseSchema.Types.ObjectId;
 }
 

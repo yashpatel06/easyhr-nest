@@ -11,7 +11,7 @@ export class Department extends DbDefaultFields {
   @Prop()
   displayName: string;
 
-  @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.Designation })
+  @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.Company })
   companyId: MongooseSchema.Types.ObjectId;
 }
 
