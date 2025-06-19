@@ -20,6 +20,7 @@ enum PATH {
   main = 'company',
   create = 'create',
   list = 'list',
+  details = 'details/:id',
   edit = 'edit/:id',
   delete = 'delete/:id',
 }
@@ -55,6 +56,28 @@ export class CompanyController {
       COMMON_MESSAGE.Success,
       200,
       companyList,
+    );
+  }
+
+  @Post(PATH.details)
+  async detailsCompany(@Param('id') id: string) {
+    const companyData = await this.companyService.getCompany({
+      isActive: true,
+      isDeleted: false,
+    });
+    if (!companyData) {
+      return ResponseUtilities.responseWrapper(
+        false,
+        COMMON_MESSAGE.NotFound.replace('{param}', 'Company'),
+        404,
+      );
+    }
+
+    return ResponseUtilities.responseWrapper(
+      true,
+      COMMON_MESSAGE.Success,
+      200,
+      companyData,
     );
   }
 
