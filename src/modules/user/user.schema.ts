@@ -1,6 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Schema as MongooseSchema } from 'mongoose';
-import { COLLECTIONS, dcSchemaOptions, EGender } from 'src/utils/common';
+import {
+  COLLECTIONS,
+  dcSchemaOptions,
+  EGender,
+  EUserType,
+} from 'src/utils/common';
 import { DbDefaultFields } from 'src/utils/dbDefault.schema';
 
 @Schema({ ...dcSchemaOptions, collection: COLLECTIONS.User })
@@ -16,6 +21,9 @@ export class User extends DbDefaultFields {
 
   @Prop()
   contactNo: string;
+
+  @Prop({ type: String, enum: EUserType, default: EUserType.Client })
+  userType: string;
 
   @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.RoleMaster })
   roleId: MongooseSchema.Types.ObjectId;

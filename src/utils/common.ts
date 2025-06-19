@@ -7,6 +7,7 @@ export const dcSchemaOptions: SchemaOptions = {
 
 export const COLLECTIONS = {
   User: 'user',
+  Company: 'Company',
   RoleMaster: 'role_master',
   Department: 'department',
   Designation: 'designation',
@@ -21,3 +22,8 @@ export const EGender = {
   Male: 'male',
   Female: 'female',
 };
+
+export enum EUserType {
+  System = 'System',
+  Client = 'Client',
+}
