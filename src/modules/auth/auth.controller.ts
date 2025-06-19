@@ -88,7 +88,7 @@ export class AuthController {
   async currentUser(@Request() req) {
     const { authToken, user } = extractRequestParams(req);
 
-    const data = await this.userService.aggregate([
+    const [data] = await this.userService.aggregate([
       {
         $match: {
           _id: new mongoose.Types.ObjectId(String(user?._id)),
