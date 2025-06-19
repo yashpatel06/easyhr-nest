@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose, { Schema as MongooseSchema } from 'mongoose';
 import { COLLECTIONS, dcSchemaOptions } from 'src/utils/common';
 import { DbDefaultFields } from 'src/utils/dbDefault.schema';
 
@@ -9,6 +10,9 @@ export class Department extends DbDefaultFields {
 
   @Prop()
   displayName: string;
+
+  @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.Designation })
+  companyId: MongooseSchema.Types.ObjectId;
 }
 
 export const DepartmentSchema = SchemaFactory.createForClass(Department);

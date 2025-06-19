@@ -8,6 +8,9 @@ export class EditDepartmentDto {
   displayName: string;
 
   @IsMongoId()
+  companyId: string;
+
+  @IsMongoId()
   @IsOptional()
   updatedBy: string;
 }

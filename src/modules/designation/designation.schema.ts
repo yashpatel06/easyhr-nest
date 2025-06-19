@@ -11,11 +11,11 @@ export class Designation extends DbDefaultFields {
   @Prop()
   displayName: string;
 
-  @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.RoleMaster })
-  roleId: MongooseSchema.Types.ObjectId;
-
   @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.Department })
   departmentId: MongooseSchema.Types.ObjectId;
+
+  @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.RoleMaster })
+  companyId: MongooseSchema.Types.ObjectId;
 }
 
 export const DesignationSchema = SchemaFactory.createForClass(Designation);
