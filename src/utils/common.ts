@@ -9,6 +9,7 @@ export const COLLECTIONS = {
   User: 'user',
   Company: 'company',
   RoleMaster: 'role_master',
+  PermissionMaster: 'permission_master',
   Department: 'department',
   Designation: 'designation',
 };

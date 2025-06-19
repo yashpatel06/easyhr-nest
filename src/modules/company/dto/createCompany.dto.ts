@@ -1,10 +1,4 @@
-import {
-  IsEmail,
-  IsMongoId,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsEmail, IsMongoId, IsOptional, IsString } from 'class-validator';
 
 export class CreateCompanyDto {
   @IsString()

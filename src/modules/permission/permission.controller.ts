@@ -9,16 +9,16 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { CompanyService } from './company.service';
+import { PermissionService } from './permission.service';
 import { AuthService } from '../auth/auth.service';
-import { CreateCompanyDto } from './dto/createCompany.dto';
 import { ResponseUtilities } from 'src/utils/response.util';
 import { COMMON_MESSAGE } from 'src/utils/message.enum';
-import { EditCompanyDto } from './dto/editCompany.dto';
 import mongoose from 'mongoose';
+import { CreatePermissionDto } from './dto/createPermission.dto';
+import { EditPermissionDto } from './dto/editPermission.dto';
 
 enum PATH {
-  main = 'company',
+  main = 'permission',
   create = 'create',
   list = 'list',
   details = 'details/:id',
@@ -28,19 +28,31 @@ enum PATH {
 
 @UseGuards(AuthGuard)
 @Controller(PATH.main)
-export class CompanyController {
+export class PermissionController {
   constructor(
-    private companyService: CompanyService,
+    private permissionService: PermissionService,
     private authService: AuthService,
   ) {}
 
   @Post(PATH.create)
   @UsePipes(new ValidationPipe())
-  async createCompany(@Body() data: CreateCompanyDto, @Request() req) {
+  async createPermission(@Body() data: CreatePermissionDto, @Request() req) {
     const user = req?.user;
+    const oldData = await this.permissionService.getPermission({
+      name: data?.name,
+      isActive: true,
+      isDeleted: false,
+    });
+    if (oldData) {
+      return ResponseUtilities.responseWrapper(
+        false,
+        COMMON_MESSAGE.AlreadyExist.replace('{param}', 'Permission'),
+        400,
+      );
+    }
 
     data.createdBy = user?._id;
-    const newData = await this.companyService.createCompany(data);
+    const newData = await this.permissionService.createPermission(data);
     return ResponseUtilities.responseWrapper(
       true,
       COMMON_MESSAGE.Success,
@@ -50,27 +62,27 @@ export class CompanyController {
   }
 
   @Post(PATH.list)
-  async listCompany() {
-    const companyList = await this.companyService.listCompany();
+  async listPermission() {
+    const permissionList = await this.permissionService.listPermission();
     return ResponseUtilities.responseWrapper(
       true,
       COMMON_MESSAGE.Success,
       200,
-      companyList,
+      permissionList,
     );
   }
 
   @Post(PATH.details)
-  async detailsCompany(@Param('id') id: string) {
-    const companyData = await this.companyService.getCompany({
+  async detailsPermission(@Param('id') id: string) {
+    const permissionData = await this.permissionService.getPermission({
       _id: new mongoose.Types.ObjectId(id),
       isActive: true,
       isDeleted: false,
     });
-    if (!companyData) {
+    if (!permissionData) {
       return ResponseUtilities.responseWrapper(
         false,
-        COMMON_MESSAGE.NotFound.replace('{param}', 'Company'),
+        COMMON_MESSAGE.NotFound.replace('{param}', 'Permission'),
         404,
       );
     }
@@ -79,28 +91,28 @@ export class CompanyController {
       true,
       COMMON_MESSAGE.Success,
       200,
-      companyData,
+      permissionData,
     );
   }
 
   @Post(PATH.edit)
   @UsePipes(new ValidationPipe())
-  async editCompany(
+  async editPermission(
     @Param('id') id: string,
-    @Body() editCompany: EditCompanyDto,
+    @Body() editPermission: EditPermissionDto,
     @Request() req,
   ) {
     const user = req?.user;
-    editCompany.updatedBy = user?._id;
+    editPermission.updatedBy = user?._id;
 
-    const updateCompany = await this.companyService.editCompany(
+    const updatePermission = await this.permissionService.editPermission(
       id,
-      editCompany,
+      editPermission,
     );
-    if (!updateCompany) {
+    if (!updatePermission) {
       return ResponseUtilities.responseWrapper(
         false,
-        COMMON_MESSAGE.NotFound.replace('{param}', 'Company'),
+        COMMON_MESSAGE.NotFound.replace('{param}', 'Permission'),
         404,
       );
     }
@@ -109,18 +121,21 @@ export class CompanyController {
       true,
       COMMON_MESSAGE.Success,
       200,
-      updateCompany,
+      updatePermission,
     );
   }
 
   @Post(PATH.delete)
-  async deleteCompany(@Param('id') id: string, @Request() req) {
+  async deletePermission(@Param('id') id: string, @Request() req) {
     const user = req?.user;
-    const deleteCompany = await this.companyService.deleteCompany(id, user);
-    if (!deleteCompany) {
+    const deletePermission = await this.permissionService.deletePermission(
+      id,
+      user,
+    );
+    if (!deletePermission) {
       return ResponseUtilities.responseWrapper(
         false,
-        COMMON_MESSAGE.NotFound.replace('{param}', 'Company'),
+        COMMON_MESSAGE.NotFound.replace('{param}', 'Permission'),
         404,
       );
     }
@@ -129,7 +144,7 @@ export class CompanyController {
       true,
       COMMON_MESSAGE.Success,
       200,
-      deleteCompany,
+      deletePermission,
     );
   }
 }

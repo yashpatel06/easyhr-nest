@@ -8,6 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { RoleModule } from './modules/role/role.module';
 import { DeparatmentModule } from './modules/department/department.module';
 import { DesignationModule } from './modules/designation/designation.module';
+import { PermissionModule } from './modules/permission/permission.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { DesignationModule } from './modules/designation/designation.module';
     }),
     UsersModule,
     AuthModule,
+    PermissionModule,
     RoleModule,
     DeparatmentModule,
     DesignationModule,
