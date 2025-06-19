@@ -34,8 +34,10 @@ export class RoleController {
   @UsePipes(new ValidationPipe())
   async createRole(@Body() data: CreateRoleDto, @Request() req) {
     const user = req.user;
+    const companyId = data?.companyId || user?.companyId;
     const oldData = await this.roleService.getRole({
       name: data?.name,
+      companyId: { $nin: [new mongoose.Types.ObjectId(companyId)] },
       // isActive: true,
       isDeleted: false,
     });

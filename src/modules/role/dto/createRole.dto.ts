@@ -15,6 +15,7 @@ export class CreateRoleDto {
   permissionIds: string[];
 
   @IsMongoId()
+  @IsOptional()
   companyId: string;
 
   @IsMongoId()
