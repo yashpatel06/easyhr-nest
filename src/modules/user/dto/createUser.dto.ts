@@ -30,6 +30,9 @@ export class CreateUserDto {
   @IsMongoId()
   designationId: string;
 
+  @IsMongoId()
+  companyId: string;
+
   @IsString()
   @IsOptional()
   gender: String;

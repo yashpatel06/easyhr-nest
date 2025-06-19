@@ -8,6 +8,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { RoleModule } from '../role/role.module';
 import { DeparatmentModule } from '../department/department.module';
 import { DesignationModule } from '../designation/designation.module';
+import { CompanyModule } from '../company/company.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { DesignationModule } from '../designation/designation.module';
       inject: [ConfigService],
     }),
     forwardRef(() => UsersModule),
+    forwardRef(() => CompanyModule),
     forwardRef(() => RoleModule),
     forwardRef(() => DeparatmentModule),
     forwardRef(() => DesignationModule),

@@ -7,7 +7,7 @@ export const dcSchemaOptions: SchemaOptions = {
 
 export const COLLECTIONS = {
   User: 'user',
-  Company: 'Company',
+  Company: 'company',
   RoleMaster: 'role_master',
   Department: 'department',
   Designation: 'designation',

@@ -48,6 +48,9 @@ export class User extends DbDefaultFields {
 
   @Prop()
   profilePic: string;
+
+  @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.Designation })
+  companyId: MongooseSchema.Types.ObjectId;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
