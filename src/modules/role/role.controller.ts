@@ -37,7 +37,7 @@ export class RoleController {
     const companyId = data?.companyId || user?.companyId;
     const oldData = await this.roleService.getRole({
       name: data?.name,
-      companyId: { $nin: [new mongoose.Types.ObjectId(companyId)] },
+      companyId: { $ne: new mongoose.Types.ObjectId(companyId) },
       // isActive: true,
       isDeleted: false,
     });
