@@ -14,11 +14,13 @@ import { COMMON_MESSAGE } from 'src/utils/message.enum';
 import { CreateRoleDto } from './dto/createRole.dto';
 import { EditRoleDto } from './dto/editRole.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
+import mongoose from 'mongoose';
 
 enum PATH {
   main = 'role',
   create = 'create',
   list = 'list',
+  details = 'details/:id',
   edit = 'edit/:id',
   delete = 'delete/:id',
   changeStatus = 'change-status/:id',
@@ -64,6 +66,29 @@ export class RoleController {
       COMMON_MESSAGE.Success,
       200,
       rolesList,
+    );
+  }
+
+  @Post(PATH.details)
+  async detailsRole(@Param('id') id: string) {
+    const roleData = await this.roleService.getRole({
+      _id: new mongoose.Types.ObjectId(id),
+      // isActive: true,
+      isDeleted: false,
+    });
+    if (!roleData) {
+      return ResponseUtilities.responseWrapper(
+        false,
+        COMMON_MESSAGE.NotFound.replace('{param}', 'Role'),
+        404,
+      );
+    }
+
+    return ResponseUtilities.responseWrapper(
+      true,
+      COMMON_MESSAGE.Success,
+      200,
+      roleData,
     );
   }
 
