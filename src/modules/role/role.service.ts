@@ -22,7 +22,7 @@ export class RoleService {
   }
 
   async listRole() {
-    return this.roleModel.find({ isActive: true, isDeleted: false });
+    return this.roleModel.find({ isDeleted: false });
   }
 
   async editRole(id: string, data: EditRoleDto) {
@@ -42,5 +42,9 @@ export class RoleService {
       },
       { new: true },
     );
+  }
+
+  async changeStatusRole(id: string, data: any) {
+    return this.roleModel.findByIdAndUpdate(id, data, { new: true });
   }
 }

@@ -23,6 +23,7 @@ enum PATH {
   list = 'list',
   edit = 'edit/:id',
   delete = 'delete/:id',
+  changeStatus = 'change-status/:id',
 }
 
 @UseGuards(AuthGuard)
@@ -39,7 +40,7 @@ export class UsersController {
     const user = req?.user;
     const oldUser = await this.userService.getUser({
       email: userData.email,
-      isActive: true,
+      // isActive: true,
       isDeleted: false,
     });
     if (oldUser) {
@@ -119,6 +120,32 @@ export class UsersController {
       COMMON_MESSAGE.Success,
       200,
       deleteUser,
+    );
+  }
+
+  @Post(PATH.changeStatus)
+  async changeStatusUser(
+    @Param('id') id: string,
+    @Body() data: any,
+    @Request() req,
+  ) {
+    const user = req?.user;
+    data.updatedBy = user?._id;
+
+    const updateData = await this.userService.changeStatusUser(id, data);
+    if (!updateData) {
+      return ResponseUtilities.responseWrapper(
+        false,
+        COMMON_MESSAGE.NotFound.replace('{param}', 'User'),
+        404,
+      );
+    }
+
+    return ResponseUtilities.responseWrapper(
+      true,
+      COMMON_MESSAGE.Success,
+      200,
+      updateData,
     );
   }
 }

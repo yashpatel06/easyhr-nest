@@ -16,7 +16,7 @@ export class UsersService {
   }
 
   async listUsers() {
-    return this.userModel.find({ isActive: true, isDeleted: false });
+    return this.userModel.find({ isDeleted: false });
   }
 
   async getUser(filter: FilterQuery<User>) {
@@ -40,6 +40,10 @@ export class UsersService {
       },
       { new: true },
     );
+  }
+
+  async changeStatusUser(id: string, data: any) {
+    return this.userModel.findByIdAndUpdate(id, data, { new: true });
   }
 
   async aggregate(pipeline: PipelineStage[]) {

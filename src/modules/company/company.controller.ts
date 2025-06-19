@@ -24,6 +24,7 @@ enum PATH {
   details = 'details/:id',
   edit = 'edit/:id',
   delete = 'delete/:id',
+  changeStatus = 'change-status/:id',
 }
 
 @UseGuards(AuthGuard)
@@ -64,7 +65,7 @@ export class CompanyController {
   async detailsCompany(@Param('id') id: string) {
     const companyData = await this.companyService.getCompany({
       _id: new mongoose.Types.ObjectId(id),
-      isActive: true,
+      // isActive: true,
       isDeleted: false,
     });
     if (!companyData) {
@@ -130,6 +131,31 @@ export class CompanyController {
       COMMON_MESSAGE.Success,
       200,
       deleteCompany,
+    );
+  }
+
+  @Post(PATH.changeStatus)
+  async changeStatusCompany(
+    @Param('id') id: string,
+    @Body() data: any,
+    @Request() req,
+  ) {
+    const user = req?.user;
+    data.updatedBy = user?._id;
+    const updateData = await this.companyService.changeStatusCompany(id, data);
+    if (!updateData) {
+      return ResponseUtilities.responseWrapper(
+        false,
+        COMMON_MESSAGE.NotFound.replace('{param}', 'Company'),
+        404,
+      );
+    }
+
+    return ResponseUtilities.responseWrapper(
+      true,
+      COMMON_MESSAGE.Success,
+      200,
+      updateData,
     );
   }
 }

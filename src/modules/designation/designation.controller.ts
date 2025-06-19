@@ -24,6 +24,7 @@ enum PATH {
   list = 'list',
   edit = 'edit/:id',
   delete = 'delete/:id',
+  changeStatus = 'change-status/:id',
 }
 @UseGuards(AuthGuard)
 @Controller(PATH.main)
@@ -55,7 +56,7 @@ export class DesignationContoller {
     const oldDesignation = await this.designationService.getDesignation({
       name: data?.name,
       departmentId: new mongoose.Types.ObjectId(data?.departmentId),
-      isActive: true,
+      // isActive: true,
       isDeleted: false,
     });
     if (oldDesignation) {
@@ -149,6 +150,35 @@ export class DesignationContoller {
       COMMON_MESSAGE.Success,
       200,
       deleteData,
+    );
+  }
+
+  @Post(PATH.changeStatus)
+  async changeStatus(
+    @Param('id') id: string,
+    @Body() data: any,
+    @Request() req,
+  ) {
+    const user = req?.user;
+    data.updatedBy = user?._id;
+
+    const updateData = await this.designationService.changeStatusDesignation(
+      id,
+      data,
+    );
+    if (!updateData) {
+      return ResponseUtilities.responseWrapper(
+        false,
+        COMMON_MESSAGE.NotFound.replace('{param}', 'Designation'),
+        404,
+      );
+    }
+
+    return ResponseUtilities.responseWrapper(
+      true,
+      COMMON_MESSAGE.Success,
+      200,
+      updateData,
     );
   }
 }

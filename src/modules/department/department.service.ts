@@ -23,7 +23,7 @@ export class DepartmentService {
   }
 
   async listDepartment() {
-    return this.departmentModel.find({ isActive: true, isDeleted: false });
+    return this.departmentModel.find({ isDeleted: false });
   }
 
   async editDepartment(id: string, data: EditDepartmentDto) {
@@ -43,5 +43,9 @@ export class DepartmentService {
       },
       { new: true },
     );
+  }
+
+  async changeStatusDepartment(id: string, data: any) {
+    return this.departmentModel.findByIdAndUpdate(id, data, { new: true });
   }
 }

@@ -23,7 +23,7 @@ export class DesignationService {
   }
 
   async listDesignation() {
-    return this.designationModel.find({ isActive: true, isDeleted: false });
+    return this.designationModel.find({ isDeleted: false });
   }
 
   async editDesignation(id: string, data: EditDesignationDto) {
@@ -43,5 +43,9 @@ export class DesignationService {
       },
       { new: true },
     );
+  }
+
+  async changeStatusDesignation(id: string, data: any) {
+    return this.designationModel.findByIdAndUpdate(id, data, { new: true });
   }
 }

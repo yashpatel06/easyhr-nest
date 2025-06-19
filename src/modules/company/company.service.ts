@@ -22,7 +22,7 @@ export class CompanyService {
   }
 
   async listCompany() {
-    return this.companyModel.find({ isActive: true, isDeleted: false });
+    return this.companyModel.find({ isDeleted: false });
   }
 
   async editCompany(id: string, editCompany: EditCompanyDto) {
@@ -38,5 +38,9 @@ export class CompanyService {
         deletedAt: new Date(),
       },
     });
+  }
+
+  async changeStatusCompany(id: string, data: any) {
+    return this.companyModel.findByIdAndUpdate(id, data, { new: true });
   }
 }

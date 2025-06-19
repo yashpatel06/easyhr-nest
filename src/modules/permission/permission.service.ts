@@ -19,7 +19,7 @@ export class PermissionService {
   }
 
   async listPermission() {
-    return this.permissionModel.find({ isActive: true, isDeleted: false });
+    return this.permissionModel.find({ isDeleted: false });
   }
 
   async getPermission(filter: FilterQuery<PermissionMaster>) {
@@ -45,5 +45,9 @@ export class PermissionService {
       },
       { new: true },
     );
+  }
+
+  async changeStatusPermission(id: string, data: any) {
+    return this.permissionModel.findByIdAndUpdate(id, data, { new: true });
   }
 }

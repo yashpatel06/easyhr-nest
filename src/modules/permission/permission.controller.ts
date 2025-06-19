@@ -24,6 +24,7 @@ enum PATH {
   details = 'details/:id',
   edit = 'edit/:id',
   delete = 'delete/:id',
+  changeStatus = 'change-status/:id',
 }
 
 @UseGuards(AuthGuard)
@@ -40,7 +41,7 @@ export class PermissionController {
     const user = req?.user;
     const oldData = await this.permissionService.getPermission({
       name: data?.name,
-      isActive: true,
+      // isActive: true,
       isDeleted: false,
     });
     if (oldData) {
@@ -145,6 +146,35 @@ export class PermissionController {
       COMMON_MESSAGE.Success,
       200,
       deletePermission,
+    );
+  }
+
+  @Post(PATH.changeStatus)
+  async changeStatusPermission(
+    @Param('id') id: string,
+    @Body() data: any,
+    @Request() req,
+  ) {
+    const user = req?.user;
+    data.updatedBy = user?._id;
+
+    const updateData = await this.permissionService.changeStatusPermission(
+      id,
+      data,
+    );
+    if (!updateData) {
+      return ResponseUtilities.responseWrapper(
+        false,
+        COMMON_MESSAGE.NotFound.replace('{param}', 'Permission'),
+        404,
+      );
+    }
+
+    return ResponseUtilities.responseWrapper(
+      true,
+      COMMON_MESSAGE.Success,
+      200,
+      updateData,
     );
   }
 }
