@@ -119,13 +119,26 @@ export class AuthController {
         },
       },
       {
+        $lookup: {
+          from: COLLECTIONS.Company,
+          localField: 'companyId',
+          foreignField: '_id',
+          as: 'company',
+        },
+      },
+      {
         $project: {
           name: 1,
           email: 1,
           contactNo: 1,
+          roleId: 1,
+          departmentId: 1,
+          designationId: 1,
+          companyId: 1,
           role: { $arrayElemAt: ['$role.name', 0] },
           department: { $arrayElemAt: ['$department.name', 0] },
           designation: { $arrayElemAt: ['$designation.name', 0] },
+          company: { $arrayElemAt: ['$company.name', 0] },
         },
       },
     ]);
