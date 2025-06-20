@@ -5,6 +5,7 @@ import { COLLECTIONS } from 'src/utils/common';
 import { Company } from './company.schema';
 import { CreateCompanyDto } from './dto/createCompany.dto';
 import { EditCompanyDto } from './dto/editCompany.dto';
+import { TListFilterArgument } from 'src/types/common';
 
 @Injectable()
 export class CompanyService {
@@ -21,7 +22,7 @@ export class CompanyService {
     return this.companyModel.findOne(filter);
   }
 
-  async listCompany() {
+  async listCompany(filter: TListFilterArgument) {
     return this.companyModel.find({ isDeleted: false });
   }
 

@@ -20,6 +20,7 @@ import { RoleService } from '../role/role.service';
 import { PermissionService } from '../permission/permission.service';
 import { EUserType } from 'src/utils/common';
 import { UsersService } from '../user/user.service';
+import { TListFilterArgument } from 'src/types/common';
 
 enum PATH {
   main = 'company',
@@ -104,8 +105,8 @@ export class CompanyController {
   }
 
   @Post(PATH.list)
-  async listCompany() {
-    const companyList = await this.companyService.listCompany();
+  async listCompany(@Body() body: TListFilterArgument) {
+    const companyList = await this.companyService.listCompany(body);
     return ResponseUtilities.responseWrapper(
       true,
       COMMON_MESSAGE.Success,

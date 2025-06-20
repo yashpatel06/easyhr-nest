@@ -15,6 +15,7 @@ import { CreateRoleDto } from './dto/createRole.dto';
 import { EditRoleDto } from './dto/editRole.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import mongoose from 'mongoose';
+import { COLLECTIONS } from 'src/utils/common';
 
 enum PATH {
   main = 'role',
@@ -73,11 +74,45 @@ export class RoleController {
 
   @Post(PATH.details)
   async detailsRole(@Param('id') id: string) {
-    const roleData = await this.roleService.getRole({
-      _id: new mongoose.Types.ObjectId(id),
-      // isActive: true,
-      isDeleted: false,
-    });
+    const roleData = await this.roleService.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(id),
+        },
+      },
+      {
+        $lookup: {
+          from: COLLECTIONS.PermissionMaster,
+          localField: 'permissionIds',
+          foreignField: '_id',
+          as: 'permissions',
+          pipeline: [
+            { $match: { isActive: true, isDeleted: false } },
+            {
+              $project: {
+                name: 1,
+                displayName: 1,
+              },
+            },
+          ],
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          displayName: 1,
+          roleType: 1,
+          isDefault: 1,
+          permissions: '$permissions',
+        },
+      },
+    ]);
+
+    // const roleData = await this.roleService.getRole({
+    //   _id: new mongoose.Types.ObjectId(id),
+    //   // isActive: true,
+    //   isDeleted: false,
+    // });
     if (!roleData) {
       return ResponseUtilities.responseWrapper(
         false,

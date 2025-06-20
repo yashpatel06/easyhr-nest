@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { COLLECTIONS } from 'src/utils/common';
 import { RoleMaster } from './role.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, PipelineStage } from 'mongoose';
 import { CreateRoleDto } from './dto/createRole.dto';
 import { EditRoleDto } from './dto/editRole.dto';
 
@@ -46,5 +46,9 @@ export class RoleService {
 
   async changeStatusRole(id: string, data: any) {
     return this.roleModel.findByIdAndUpdate(id, data, { new: true });
+  }
+
+  async aggregate(pipeline: PipelineStage[]) {
+    return this.roleModel.aggregate(pipeline);
   }
 }
