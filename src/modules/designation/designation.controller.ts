@@ -14,9 +14,11 @@ import { ResponseUtilities } from 'src/utils/response.util';
 import { COMMON_MESSAGE } from 'src/utils/message.enum';
 import { RoleService } from '../role/role.service';
 import { DepartmentService } from '../department/department.service';
-import mongoose from 'mongoose';
+import mongoose, { FilterQuery } from 'mongoose';
 import { EditDesignationDto } from './dto/editDesignation.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { ListFilterDto } from 'src/utils/listFilter.dto';
+import { Designation } from './designation.schema';
 
 enum PATH {
   main = 'designation',
@@ -78,13 +80,36 @@ export class DesignationContoller {
   }
 
   @Post(PATH.list)
-  async listDesignation() {
-    const designationList = await this.designationService.listDesignation();
+  async listDesignation(@Body() body: ListFilterDto) {
+    const { currentPage, limit, search, sortOrder, sortParam } = body;
+    const skip = ResponseUtilities.calculateSkip(currentPage, limit);
+    const match: FilterQuery<Designation> = {
+      isDeleted: false,
+    };
+
+    if (search && search !== '') {
+      const searchQuery = { $regex: search, $options: 'i' };
+      match['$or'] = [{ name: searchQuery }, { displayName: searchQuery }];
+    }
+
+    const result = await this.designationService.aggregate([
+      {
+        $match: match,
+      },
+      { $sort: { [sortParam]: sortOrder } },
+      ...ResponseUtilities.facetStage(skip, limit),
+    ]);
+    const data = ResponseUtilities.formatPaginatedResponse(
+      result,
+      currentPage,
+      limit,
+    );
+
     return ResponseUtilities.responseWrapper(
       true,
       COMMON_MESSAGE.Success,
       200,
-      designationList,
+      data,
     );
   }
 

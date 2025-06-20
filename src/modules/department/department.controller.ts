@@ -14,6 +14,9 @@ import { ResponseUtilities } from 'src/utils/response.util';
 import { COMMON_MESSAGE } from 'src/utils/message.enum';
 import { EditDepartmentDto } from './dto/editDepartment.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { FilterQuery } from 'mongoose';
+import { Department } from './department.schema';
+import { ListFilterDto } from 'src/utils/listFilter.dto';
 
 enum PATH {
   main = 'department',
@@ -57,13 +60,36 @@ export class DepartmentContoller {
   }
 
   @Post(PATH.list)
-  async listDepartment() {
-    const departmentList = await this.departmentService.listDepartment();
+  async listDepartment(@Body() body: ListFilterDto) {
+    const { currentPage, limit, search, sortOrder, sortParam } = body;
+    const skip = ResponseUtilities.calculateSkip(currentPage, limit);
+    const match: FilterQuery<Department> = {
+      isDeleted: false,
+    };
+
+    if (search && search !== '') {
+      const searchQuery = { $regex: search, $options: 'i' };
+      match['$or'] = [{ name: searchQuery }, { displayName: searchQuery }];
+    }
+
+    const result = await this.departmentService.aggregate([
+      {
+        $match: match,
+      },
+      { $sort: { [sortParam]: sortOrder } },
+      ...ResponseUtilities.facetStage(skip, limit),
+    ]);
+    const data = ResponseUtilities.formatPaginatedResponse(
+      result,
+      currentPage,
+      limit,
+    );
+
     return ResponseUtilities.responseWrapper(
       true,
       COMMON_MESSAGE.Success,
       200,
-      departmentList,
+      data,
     );
   }
 

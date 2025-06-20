@@ -13,9 +13,11 @@ import { PermissionService } from './permission.service';
 import { AuthService } from '../auth/auth.service';
 import { ResponseUtilities } from 'src/utils/response.util';
 import { COMMON_MESSAGE } from 'src/utils/message.enum';
-import mongoose from 'mongoose';
+import mongoose, { FilterQuery } from 'mongoose';
 import { CreatePermissionDto } from './dto/createPermission.dto';
 import { EditPermissionDto } from './dto/editPermission.dto';
+import { ListFilterDto } from 'src/utils/listFilter.dto';
+import { PermissionMaster } from './permission.schema';
 
 enum PATH {
   main = 'permission',
@@ -64,13 +66,36 @@ export class PermissionController {
   }
 
   @Post(PATH.list)
-  async listPermission() {
-    const permissionList = await this.permissionService.listPermission();
+  async listPermission(@Body() body: ListFilterDto) {
+    const { currentPage, limit, search, sortOrder, sortParam } = body;
+    const skip = ResponseUtilities.calculateSkip(currentPage, limit);
+    const match: FilterQuery<PermissionMaster> = {
+      isDeleted: false,
+    };
+
+    if (search && search !== '') {
+      const searchQuery = { $regex: search, $options: 'i' };
+      match['$or'] = [{ name: searchQuery }, { displayName: searchQuery }];
+    }
+
+    const result = await this.permissionService.aggregate([
+      {
+        $match: match,
+      },
+      { $sort: { [sortParam]: sortOrder } },
+      ...ResponseUtilities.facetStage(skip, limit),
+    ]);
+    const data = ResponseUtilities.formatPaginatedResponse(
+      result,
+      currentPage,
+      limit,
+    );
+
     return ResponseUtilities.responseWrapper(
       true,
       COMMON_MESSAGE.Success,
       200,
-      permissionList,
+      data,
     );
   }
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, PipelineStage } from 'mongoose';
 import { COLLECTIONS } from 'src/utils/common';
 import { PermissionMaster } from './permission.schema';
 import { CreatePermissionDto } from './dto/createPermission.dto';
@@ -53,5 +53,9 @@ export class PermissionService {
 
   async changeStatusPermission(id: string, data: any) {
     return this.permissionModel.findByIdAndUpdate(id, data, { new: true });
+  }
+
+  async aggregate(pipeline: PipelineStage[]) {
+    return this.permissionModel.aggregate(pipeline);
   }
 }

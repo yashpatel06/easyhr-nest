@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, PipelineStage } from 'mongoose';
 import { COLLECTIONS } from 'src/utils/common';
 import { Department } from './department.schema';
 import { CreateDepartmentDto } from './dto/createDepartment.dto';
@@ -47,5 +47,9 @@ export class DepartmentService {
 
   async changeStatusDepartment(id: string, data: any) {
     return this.departmentModel.findByIdAndUpdate(id, data, { new: true });
+  }
+
+  async aggregate(pipeline: PipelineStage[]) {
+    return this.departmentModel.aggregate(pipeline);
   }
 }

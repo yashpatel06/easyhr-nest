@@ -20,9 +20,8 @@ import { RoleService } from '../role/role.service';
 import { PermissionService } from '../permission/permission.service';
 import { EUserType } from 'src/utils/common';
 import { UsersService } from '../user/user.service';
-import { TListFilterArgument } from 'src/types/common';
 import { ListFilterDto } from 'src/utils/listFilter.dto';
-import { RoleMaster } from '../role/role.schema';
+import { Company } from './company.schema';
 
 enum PATH {
   main = 'company',
@@ -108,10 +107,9 @@ export class CompanyController {
 
   @Post(PATH.list)
   async listCompany(@Body() body: ListFilterDto) {
-    const { currentPage, limit, search, sortOrder, sortParam, isTemplate } =
-      body;
+    const { currentPage, limit, search, sortOrder, sortParam } = body;
     const skip = ResponseUtilities.calculateSkip(currentPage, limit);
-    const match: FilterQuery<RoleMaster> = {
+    const match: FilterQuery<Company> = {
       isDeleted: false,
     };
 
@@ -120,12 +118,24 @@ export class CompanyController {
       match['$or'] = [{ name: searchQuery }, { displayName: searchQuery }];
     }
 
-    const companyList = await this.companyService.listCompany(body);
+    const result = await this.companyService.aggregate([
+      {
+        $match: match,
+      },
+      { $sort: { [sortParam]: sortOrder } },
+      ...ResponseUtilities.facetStage(skip, limit),
+    ]);
+    const data = ResponseUtilities.formatPaginatedResponse(
+      result,
+      currentPage,
+      limit,
+    );
+
     return ResponseUtilities.responseWrapper(
       true,
       COMMON_MESSAGE.Success,
       200,
-      companyList,
+      data,
     );
   }
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, PipelineStage } from 'mongoose';
 import { COLLECTIONS } from 'src/utils/common';
 import { Company } from './company.schema';
 import { CreateCompanyDto } from './dto/createCompany.dto';
@@ -43,5 +43,9 @@ export class CompanyService {
 
   async changeStatusCompany(id: string, data: any) {
     return this.companyModel.findByIdAndUpdate(id, data, { new: true });
+  }
+
+  async aggregate(pipeline: PipelineStage[]) {
+    return this.companyModel.aggregate(pipeline);
   }
 }

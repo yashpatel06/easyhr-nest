@@ -16,6 +16,8 @@ import { COMMON_MESSAGE } from 'src/utils/message.enum';
 import { CreateUserDto } from './dto/createUser.dto';
 import { EditUserDto } from './dto/editUser.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { ListFilterDto } from 'src/utils/listFilter.dto';
+import { FilterQuery } from 'mongoose';
 
 enum PATH {
   main = 'user',
@@ -67,13 +69,36 @@ export class UsersController {
   }
 
   @Post(PATH.list)
-  async getUsers() {
-    const usersList = await this.userService.listUsers();
+  async getUsers(@Body() body: ListFilterDto) {
+    const { currentPage, limit, search, sortOrder, sortParam } = body;
+    const skip = ResponseUtilities.calculateSkip(currentPage, limit);
+    const match: FilterQuery<User> = {
+      isDeleted: false,
+    };
+
+    if (search && search !== '') {
+      const searchQuery = { $regex: search, $options: 'i' };
+      match['$or'] = [{ name: searchQuery }];
+    }
+
+    const result = await this.userService.aggregate([
+      {
+        $match: match,
+      },
+      { $sort: { [sortParam]: sortOrder } },
+      ...ResponseUtilities.facetStage(skip, limit),
+    ]);
+    const data = ResponseUtilities.formatPaginatedResponse(
+      result,
+      currentPage,
+      limit,
+    );
+
     return ResponseUtilities.responseWrapper(
       true,
       COMMON_MESSAGE.Success,
       200,
-      usersList,
+      data,
     );
   }
 

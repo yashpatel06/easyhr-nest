@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, PipelineStage } from 'mongoose';
 import { COLLECTIONS } from 'src/utils/common';
 import { Designation } from './designation.schema';
 import { CreateDesignationDto } from './dto/createDesignation.dto';
@@ -47,5 +47,9 @@ export class DesignationService {
 
   async changeStatusDesignation(id: string, data: any) {
     return this.designationModel.findByIdAndUpdate(id, data, { new: true });
+  }
+
+  async aggregate(pipeline: PipelineStage[]) {
+    return this.designationModel.aggregate(pipeline);
   }
 }
