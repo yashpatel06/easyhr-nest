@@ -10,8 +10,8 @@ export class CreatePermissionDto {
   @IsString()
   group: string;
 
-  @IsString()
-  permissionType: string;
+  // @IsString()
+  // permissionType: string;
 
   @IsMongoId()
   @IsOptional()
