@@ -15,12 +15,14 @@ import { CreateCompanyDto } from './dto/createCompany.dto';
 import { ResponseUtilities } from 'src/utils/response.util';
 import { COMMON_MESSAGE } from 'src/utils/message.enum';
 import { EditCompanyDto } from './dto/editCompany.dto';
-import mongoose from 'mongoose';
+import mongoose, { FilterQuery } from 'mongoose';
 import { RoleService } from '../role/role.service';
 import { PermissionService } from '../permission/permission.service';
 import { EUserType } from 'src/utils/common';
 import { UsersService } from '../user/user.service';
 import { TListFilterArgument } from 'src/types/common';
+import { ListFilterDto } from 'src/utils/listFilter.dto';
+import { RoleMaster } from '../role/role.schema';
 
 enum PATH {
   main = 'company',
@@ -105,7 +107,19 @@ export class CompanyController {
   }
 
   @Post(PATH.list)
-  async listCompany(@Body() body: TListFilterArgument) {
+  async listCompany(@Body() body: ListFilterDto) {
+    const { currentPage, limit, search, sortOrder, sortParam, isTemplate } =
+      body;
+    const skip = ResponseUtilities.calculateSkip(currentPage, limit);
+    const match: FilterQuery<RoleMaster> = {
+      isDeleted: false,
+    };
+
+    if (search && search !== '') {
+      const searchQuery = { $regex: search, $options: 'i' };
+      match['$or'] = [{ name: searchQuery }, { displayName: searchQuery }];
+    }
+
     const companyList = await this.companyService.listCompany(body);
     return ResponseUtilities.responseWrapper(
       true,

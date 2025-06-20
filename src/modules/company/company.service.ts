@@ -22,7 +22,7 @@ export class CompanyService {
     return this.companyModel.findOne(filter);
   }
 
-  async listCompany(filter: TListFilterArgument) {
+  async listCompany(filter: any) {
     return this.companyModel.find({ isDeleted: false });
   }
 

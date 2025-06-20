@@ -1,6 +1,15 @@
+import { PipelineStage } from 'mongoose';
 import { PaginationOptions, PaginationResponse } from 'src/types/common';
 
 export class ResponseUtilities {
+  /**
+   * Formats a unified JSON response.
+   * @param success - Indicates if the operation was successful.
+   * @param message - Descriptive message for the response.
+   * @param status - HTTP status code (default: 200).
+   * @param data - Payload data (default: null).
+   * @param error - Error information (default: null).
+   */
   static responseWrapper(
     success: boolean,
     message: string,
@@ -70,11 +79,19 @@ export class ResponseUtilities {
    * @param limitPerPage - Number of records per page.
    * @returns Aggregation pipeline facet stage
    */
-  static facetStage(skip: number, limitPerPage: number) {
+  static facetStage(
+    skip: number,
+    limitPerPage: number,
+    dataPipeline: PipelineStage[] = [],
+  ) {
     return [
       {
         $facet: {
-          data: [{ $skip: skip }, { $limit: limitPerPage }],
+          data: [
+            { $skip: skip },
+            { $limit: limitPerPage },
+            ...(Array.isArray(dataPipeline) ? (dataPipeline as any) : []),
+          ],
           total: [{ $count: 'total' }],
         },
       },
@@ -87,7 +104,7 @@ export class ResponseUtilities {
    * @param limitPerPage - Number of records per page.
    * @returns Number of documents to skip.
    */
-  static calculateSkip(currentPage: number, limitPerPage: number): number {
-    return (currentPage - 1) * limitPerPage;
+  static calculateSkip(currentPage: number, limit: number) {
+    return (currentPage - 1) * limit;
   }
 }

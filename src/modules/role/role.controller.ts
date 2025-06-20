@@ -74,7 +74,7 @@ export class RoleController {
 
   @Post(PATH.details)
   async detailsRole(@Param('id') id: string) {
-    const roleData = await this.roleService.aggregate([
+    const [roleData] = await this.roleService.aggregate([
       {
         $match: {
           _id: new mongoose.Types.ObjectId(id),
@@ -92,6 +92,7 @@ export class RoleController {
               $project: {
                 name: 1,
                 displayName: 1,
+                group: 1,
               },
             },
           ],
@@ -103,6 +104,7 @@ export class RoleController {
           displayName: 1,
           roleType: 1,
           isDefault: 1,
+          isActive: 1,
           permissions: '$permissions',
         },
       },
