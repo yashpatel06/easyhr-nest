@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsEmail,
   IsMongoId,
   IsNotEmpty,
@@ -89,6 +90,14 @@ export class CreateUserDto {
   @IsString()
   @IsOptional()
   permanentPincode?: string;
+
+  @IsArray()
+  @IsMongoId({ each: true })
+  reportingManager?: string[];
+
+  @IsArray()
+  @IsMongoId({ each: true })
+  projectManager?: string[];
 
   @IsMongoId()
   @IsOptional()

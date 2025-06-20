@@ -150,6 +150,7 @@ export class AuthController {
           name: 1,
           email: 1,
           contactNo: 1,
+          userType: 1,
           roleId: 1,
           departmentId: 1,
           designationId: 1,

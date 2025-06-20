@@ -75,6 +75,12 @@ export class User extends DbDefaultFields {
 
   @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.Company })
   companyId: MongooseSchema.Types.ObjectId;
+
+  @Prop({ type: [mongoose.Schema.ObjectId], ref: COLLECTIONS.User })
+  reportingManager: MongooseSchema.Types.ObjectId[];
+
+  @Prop({ type: [mongoose.Schema.ObjectId], ref: COLLECTIONS.User })
+  projectManager: MongooseSchema.Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
