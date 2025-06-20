@@ -100,6 +100,25 @@ export class AuthController {
           localField: 'roleId',
           foreignField: '_id',
           as: 'role',
+          pipeline: [
+            {
+              $lookup: {
+                from: COLLECTIONS.PermissionMaster,
+                localField: 'permissionIds',
+                foreignField: '_id',
+                as: 'permissions',
+                pipeline: [
+                  { $match: { isActive: true, isDeleted: false } },
+                  {
+                    $project: {
+                      name: 1,
+                      displayName: 1,
+                    },
+                  },
+                ],
+              },
+            },
+          ],
         },
       },
       {
@@ -139,6 +158,7 @@ export class AuthController {
           department: { $arrayElemAt: ['$department.name', 0] },
           designation: { $arrayElemAt: ['$designation.name', 0] },
           company: { $arrayElemAt: ['$company.name', 0] },
+          permissions: { $arrayElemAt: ['$role.permissions', 0] },
         },
       },
     ]);

@@ -14,7 +14,7 @@ export class RoleMaster extends DbDefaultFields {
   @Prop({ type: String, enum: EUserType })
   roleType: string;
 
-  @Prop({ type: Boolean })
+  @Prop({ type: Boolean, default: false })
   isDefault: boolean;
 
   @Prop({ type: [mongoose.Schema.ObjectId], ref: COLLECTIONS.PermissionMaster })

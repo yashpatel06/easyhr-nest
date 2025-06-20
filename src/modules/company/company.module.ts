@@ -6,6 +6,9 @@ import { CompanyService } from './company.service';
 import { AuthModule } from '../auth/auth.module';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CompanyController } from './company.controller';
+import { UsersModule } from '../user/user.module';
+import { PermissionModule } from '../permission/permission.module';
+import { RoleModule } from '../role/role.module';
 
 @Module({
   imports: [
@@ -16,6 +19,9 @@ import { CompanyController } from './company.controller';
       },
     ]),
     forwardRef(() => AuthModule),
+    forwardRef(() => RoleModule),
+    forwardRef(() => UsersModule),
+    forwardRef(() => PermissionModule),
   ],
   providers: [CompanyService, AuthGuard],
   controllers: [CompanyController],

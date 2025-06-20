@@ -16,6 +16,10 @@ import { ResponseUtilities } from 'src/utils/response.util';
 import { COMMON_MESSAGE } from 'src/utils/message.enum';
 import { EditCompanyDto } from './dto/editCompany.dto';
 import mongoose from 'mongoose';
+import { RoleService } from '../role/role.service';
+import { PermissionService } from '../permission/permission.service';
+import { EUserType } from 'src/utils/common';
+import { UsersService } from '../user/user.service';
 
 enum PATH {
   main = 'company',
@@ -32,6 +36,9 @@ enum PATH {
 export class CompanyController {
   constructor(
     private companyService: CompanyService,
+    private roleService: RoleService,
+    private permissionService: PermissionService,
+    private userService: UsersService,
     private authService: AuthService,
   ) {}
 
@@ -42,6 +49,52 @@ export class CompanyController {
 
     data.createdBy = user?._id;
     const newData = await this.companyService.createCompany(data);
+    if (!newData) {
+      return ResponseUtilities.responseWrapper(
+        false,
+        COMMON_MESSAGE.Error,
+        500,
+      );
+    }
+
+    const permissions = await this.permissionService.getAllPermission();
+    const permissionIds = permissions?.map((e) => e?._id.toString());
+
+    const creatRole = await this.roleService.createRole({
+      name: 'Client Admin',
+      displayName: 'Client Admin',
+      roleType: EUserType.Client,
+      isDefault: true,
+      permissionIds: permissionIds,
+      companyId: newData._id.toString(),
+      createdBy: user?._id,
+    });
+    if (!creatRole) {
+      return ResponseUtilities.responseWrapper(
+        false,
+        COMMON_MESSAGE.Error,
+        500,
+      );
+    }
+
+    const password = await this.authService.hashPassword('123456');
+    const createUser = await this.userService.createUser({
+      name: newData.ownerName,
+      email: newData.email,
+      password: password,
+      contactNo: newData.contactNo,
+      roleId: creatRole._id.toString(),
+      companyId: newData._id.toString(),
+      createdBy: user?._id,
+    });
+    if (!createUser) {
+      return ResponseUtilities.responseWrapper(
+        false,
+        COMMON_MESSAGE.Error,
+        500,
+      );
+    }
+
     return ResponseUtilities.responseWrapper(
       true,
       COMMON_MESSAGE.Success,

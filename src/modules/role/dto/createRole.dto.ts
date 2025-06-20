@@ -1,4 +1,10 @@
-import { IsArray, IsMongoId, IsOptional, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsMongoId,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateRoleDto {
   @IsString()
@@ -9,6 +15,10 @@ export class CreateRoleDto {
 
   @IsString()
   roleType: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isDefault: boolean;
 
   @IsArray()
   @IsMongoId({ each: true })

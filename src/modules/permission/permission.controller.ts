@@ -21,6 +21,7 @@ enum PATH {
   main = 'permission',
   create = 'create',
   list = 'list',
+  getAll = 'getall',
   details = 'details/:id',
   edit = 'edit/:id',
   delete = 'delete/:id',
@@ -70,6 +71,17 @@ export class PermissionController {
       COMMON_MESSAGE.Success,
       200,
       permissionList,
+    );
+  }
+
+  @Post(PATH.getAll)
+  async getAllPermission() {
+    const allPermissions = await this.permissionService.getAllPermission();
+    return ResponseUtilities.responseWrapper(
+      true,
+      COMMON_MESSAGE.Success,
+      200,
+      allPermissions,
     );
   }
 

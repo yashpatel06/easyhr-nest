@@ -17,7 +17,7 @@ export class AuthService {
   async hashPassword(plainPassword: string) {
     try {
       const salt = await bcrypt.genSalt(10);
-      const hashPassword = await bcrypt.hash(plainPassword, salt);
+      const hashPassword: string = await bcrypt.hash(plainPassword, salt);
       return hashPassword;
     } catch (error) {
       return plainPassword;

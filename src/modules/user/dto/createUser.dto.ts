@@ -25,35 +25,37 @@ export class CreateUserDto {
   roleId: string;
 
   @IsMongoId()
-  departmentId: string;
+  @IsOptional()
+  departmentId?: string;
 
   @IsMongoId()
-  designationId: string;
+  @IsOptional()
+  designationId?: string;
 
   @IsMongoId()
   companyId: string;
 
   @IsString()
   @IsOptional()
-  gender: String;
+  gender?: String;
 
   @IsString()
   @IsOptional()
-  dob: Date;
+  dob?: Date;
 
   @IsString()
   @IsOptional()
-  dateOfJoining: Date;
+  dateOfJoining?: Date;
 
   @IsString()
   @IsOptional()
-  address: string;
+  address?: string;
 
   @IsString()
   @IsOptional()
-  profilePic: string;
+  profilePic?: string;
 
   @IsMongoId()
   @IsOptional()
-  createdBy: string;
+  createdBy?: string;
 }
