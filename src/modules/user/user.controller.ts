@@ -4,7 +4,9 @@ import {
   Param,
   Post,
   Request,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -18,6 +20,10 @@ import { EditUserDto } from './dto/editUser.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { ListFilterDto } from 'src/utils/listFilter.dto';
 import { FilterQuery } from 'mongoose';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { extname } from 'path';
+import { diskStorage } from 'multer';
+import { UploadInterceptor } from 'src/utils/upload.util';
 
 enum PATH {
   main = 'user',
@@ -38,7 +44,25 @@ export class UsersController {
 
   @Post(PATH.create)
   @UsePipes(new ValidationPipe())
-  async createUser(@Body() userData: CreateUserDto, @Request() req) {
+  // @UseInterceptors(
+  //   FileInterceptor('profilePic', {
+  //     storage: diskStorage({
+  //       destination: './uploads',
+  //       filename: (req, file, callback) => {
+  //         const uniqueSuffix =
+  //           Date.now() + '-' + Math.round(Math.random() * 1e9);
+  //         const ext = extname(file.originalname);
+  //         callback(null, `user-${uniqueSuffix}${ext}`);
+  //       },
+  //     }),
+  //   }),
+  // )
+  @UseInterceptors(UploadInterceptor('profilePicture', 'uploads'))
+  async createUser(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() userData: CreateUserDto,
+    @Request() req,
+  ) {
     const user = req?.user;
     const oldUser = await this.userService.getUser({
       email: userData.email,
@@ -59,6 +83,7 @@ export class UsersController {
     );
     userData.password = hashPassword;
     userData.createdBy = user?._id;
+    userData.profilePicture = file?.path;
     const data = await this.userService.createUser(userData);
     return ResponseUtilities.responseWrapper(
       true,

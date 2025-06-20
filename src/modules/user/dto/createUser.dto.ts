@@ -53,7 +53,7 @@ export class CreateUserDto {
 
   @IsString()
   @IsOptional()
-  profilePic?: string;
+  profilePicture?: string;
 
   @IsString()
   @IsOptional()
@@ -93,10 +93,12 @@ export class CreateUserDto {
 
   @IsArray()
   @IsMongoId({ each: true })
+  @IsOptional()
   reportingManager?: string[];
 
   @IsArray()
   @IsMongoId({ each: true })
+  @IsOptional()
   projectManager?: string[];
 
   @IsMongoId()

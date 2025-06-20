@@ -4,7 +4,9 @@ import {
   Param,
   Post,
   Request,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -22,6 +24,7 @@ import { EUserType } from 'src/utils/common';
 import { UsersService } from '../user/user.service';
 import { ListFilterDto } from 'src/utils/listFilter.dto';
 import { Company } from './company.schema';
+import { UploadInterceptor } from 'src/utils/upload.util';
 
 enum PATH {
   main = 'company',
@@ -46,7 +49,13 @@ export class CompanyController {
 
   @Post(PATH.create)
   @UsePipes(new ValidationPipe())
-  async createCompany(@Body() data: CreateCompanyDto, @Request() req) {
+  @UseInterceptors(UploadInterceptor('companyLogo', 'uploads'))
+  async createCompany(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() data: CreateCompanyDto,
+    @Request() req,
+  ) {
+    console.log('file >>>', file);
     const user = req?.user;
 
     const oldCompany = await this.companyService.getCompany({
@@ -63,6 +72,7 @@ export class CompanyController {
     }
 
     data.createdBy = user?._id;
+    data.companyLogo = file?.path;
     const newData = await this.companyService.createCompany(data);
     if (!newData) {
       return ResponseUtilities.responseWrapper(
@@ -178,13 +188,18 @@ export class CompanyController {
 
   @Post(PATH.edit)
   @UsePipes(new ValidationPipe())
+  @UseInterceptors(UploadInterceptor('companyLogo', 'uploads'))
   async editCompany(
     @Param('id') id: string,
     @Body() editCompany: EditCompanyDto,
     @Request() req,
+    @UploadedFile() file?: Express.Multer.File,
   ) {
     const user = req?.user;
     editCompany.updatedBy = user?._id;
+    if (file) {
+      editCompany.companyLogo = file?.path;
+    }
 
     const updateCompany = await this.companyService.editCompany(
       id,

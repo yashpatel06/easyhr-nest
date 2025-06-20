@@ -34,7 +34,7 @@ export class CreateCompanyDto {
 
   @IsString()
   @IsOptional()
-  companyLogo: string;
+  companyLogo?: string;
 
   @IsMongoId()
   @IsOptional()

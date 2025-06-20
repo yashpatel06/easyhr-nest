@@ -8,41 +8,51 @@ import {
 
 export class EditCompanyDto {
   @IsString()
-  name: string;
+  @IsOptional()
+  name?: string;
 
   @IsString()
   @IsEmail()
-  email: string;
-
-  @IsString()
-  contactNo: string;
-
-  @IsString()
-  alternateContactNo: string;
-
-  @IsString()
-  ownerName: string;
-
-  @IsString()
-  contactPerson: string;
-
-  @IsString()
-  address: string;
-
-  @IsString()
-  city: string;
-
-  @IsString()
-  state: string;
-
-  @IsString()
-  pincode: string;
+  @IsOptional()
+  email?: string;
 
   @IsString()
   @IsOptional()
-  companyLogo: string;
+  contactNo?: string;
+
+  @IsString()
+  @IsOptional()
+  alternateContactNo?: string;
+
+  @IsString()
+  @IsOptional()
+  ownerName?: string;
+
+  @IsString()
+  @IsOptional()
+  contactPerson?: string;
+
+  @IsString()
+  @IsOptional()
+  address?: string;
+
+  @IsString()
+  @IsOptional()
+  city?: string;
+
+  @IsString()
+  @IsOptional()
+  state?: string;
+
+  @IsString()
+  @IsOptional()
+  pincode?: string;
+
+  @IsString()
+  @IsOptional()
+  companyLogo?: string;
 
   @IsMongoId()
   @IsOptional()
-  updatedBy: string;
+  updatedBy?: string;
 }
