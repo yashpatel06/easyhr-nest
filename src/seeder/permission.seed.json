@@ -1,0 +1,88 @@
+[
+  {
+    "name": "view_dashboard",
+    "displayName": "View Dashboard",
+    "group": "dashboard",
+    "permissionType": "Client"
+  },
+  {
+    "name": "add_user",
+    "displayName": "Add User",
+    "group": "user"
+  },
+  {
+    "name": "edit_user",
+    "displayName": "Edit User",
+    "group": "user"
+  },
+  {
+    "name": "delete_user",
+    "displayName": "Delete User",
+    "group": "user"
+  },
+  {
+    "name": "list_user",
+    "displayName": "List Users",
+    "group": "user"
+  },
+  {
+    "name": "add_role",
+    "displayName": "Add Role",
+    "group": "role"
+  },
+  {
+    "name": "edit_role",
+    "displayName": "Edit Role",
+    "group": "role"
+  },
+  {
+    "name": "delete_role",
+    "displayName": "Delete Role",
+    "group": "role"
+  },
+  {
+    "name": "list_role",
+    "displayName": "List Roles",
+    "group": "role"
+  },
+  {
+    "name": "add_designation",
+    "displayName": "Add Designation",
+    "group": "designation"
+  },
+  {
+    "name": "edit_designation",
+    "displayName": "Edit Designation",
+    "group": "designation"
+  },
+  {
+    "name": "delete_designation",
+    "displayName": "Delete Designation",
+    "group": "designation"
+  },
+  {
+    "name": "list_designation",
+    "displayName": "List Designations",
+    "group": "designation"
+  },
+  {
+    "name": "add_department",
+    "displayName": "Add Department",
+    "group": "department"
+  },
+  {
+    "name": "edit_department",
+    "displayName": "Edit Department",
+    "group": "department"
+  },
+  {
+    "name": "delete_department",
+    "displayName": "Delete Department",
+    "group": "department"
+  },
+  {
+    "name": "list_department",
+    "displayName": "List Department",
+    "group": "department"
+  }
+]
