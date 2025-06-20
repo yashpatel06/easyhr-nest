@@ -19,6 +19,7 @@ import { EditDesignationDto } from './dto/editDesignation.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { ListFilterDto } from 'src/utils/listFilter.dto';
 import { Designation } from './designation.schema';
+import { EUserType } from 'src/utils/common';
 
 enum PATH {
   main = 'designation',
@@ -80,12 +81,17 @@ export class DesignationContoller {
   }
 
   @Post(PATH.list)
-  async listDesignation(@Body() body: ListFilterDto) {
+  async listDesignation(@Body() body: ListFilterDto, @Request() req) {
+    const user = req?.user;
     const { currentPage, limit, search, sortOrder, sortParam } = body;
     const skip = ResponseUtilities.calculateSkip(currentPage, limit);
     const match: FilterQuery<Designation> = {
       isDeleted: false,
     };
+
+    if (user.userType === EUserType.Client) {
+      match.companyId = new mongoose.Types.ObjectId(user?.companyId);
+    }
 
     if (search && search !== '') {
       const searchQuery = { $regex: search, $options: 'i' };

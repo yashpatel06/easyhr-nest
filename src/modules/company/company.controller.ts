@@ -49,6 +49,19 @@ export class CompanyController {
   async createCompany(@Body() data: CreateCompanyDto, @Request() req) {
     const user = req?.user;
 
+    const oldCompany = await this.companyService.getCompany({
+      email: data?.email,
+      isActive: true,
+      isDeleted: false,
+    });
+    if (oldCompany) {
+      return ResponseUtilities.responseWrapper(
+        false,
+        COMMON_MESSAGE.AlreadyExist.replace('{param}', 'Email'),
+        400,
+      );
+    }
+
     data.createdBy = user?._id;
     const newData = await this.companyService.createCompany(data);
     if (!newData) {
@@ -85,6 +98,7 @@ export class CompanyController {
       email: newData.email,
       password: password,
       contactNo: newData.contactNo,
+      alternateContactNo: newData.alternateContactNo,
       roleId: creatRole._id.toString(),
       companyId: newData._id.toString(),
       createdBy: user?._id,

@@ -21,6 +21,9 @@ export class CreateUserDto {
   @IsString()
   contactNo: string;
 
+  @IsString()
+  alternateContactNo?: string;
+
   @IsMongoId()
   roleId: string;
 
@@ -49,11 +52,43 @@ export class CreateUserDto {
 
   @IsString()
   @IsOptional()
-  address?: string;
+  profilePic?: string;
 
   @IsString()
   @IsOptional()
-  profilePic?: string;
+  userType?: string;
+
+  @IsString()
+  @IsOptional()
+  currentAddress?: string;
+
+  @IsString()
+  @IsOptional()
+  currentCity?: string;
+
+  @IsString()
+  @IsOptional()
+  currentState?: string;
+
+  @IsString()
+  @IsOptional()
+  currentPincode?: string;
+
+  @IsString()
+  @IsOptional()
+  permanentAddress?: string;
+
+  @IsString()
+  @IsOptional()
+  permanentCity?: string;
+
+  @IsString()
+  @IsOptional()
+  permanentState?: string;
+
+  @IsString()
+  @IsOptional()
+  permanentPincode?: string;
 
   @IsMongoId()
   @IsOptional()

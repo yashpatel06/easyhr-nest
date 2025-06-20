@@ -25,9 +25,10 @@ export class EditRoleDto {
   permissionIds: string[];
 
   @IsMongoId()
-  companyId: string;
+  @IsOptional()
+  companyId?: string;
 
   @IsMongoId()
   @IsOptional()
-  updatedBy: string;
+  updatedBy?: string;
 }

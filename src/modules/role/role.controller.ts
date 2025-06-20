@@ -15,7 +15,7 @@ import { CreateRoleDto } from './dto/createRole.dto';
 import { EditRoleDto } from './dto/editRole.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import mongoose, { FilterQuery } from 'mongoose';
-import { COLLECTIONS } from 'src/utils/common';
+import { COLLECTIONS, EUserType } from 'src/utils/common';
 import { RoleMaster } from './role.schema';
 import { ListFilterDto } from 'src/utils/listFilter.dto';
 
@@ -64,12 +64,18 @@ export class RoleController {
   }
 
   @Post(PATH.list)
-  async listRole(@Body() body: ListFilterDto) {
+  async listRole(@Body() body: ListFilterDto, @Request() req) {
+    const user = req?.user;
     const { currentPage, limit, search, sortOrder, sortParam } = body;
     const skip = ResponseUtilities.calculateSkip(currentPage, limit);
     const match: FilterQuery<RoleMaster> = {
       isDeleted: false,
+      roleType: user?.userType,
     };
+
+    if (user.userType === EUserType.Client) {
+      match.companyId = new mongoose.Types.ObjectId(user?.companyId);
+    }
 
     if (search && search !== '') {
       const searchQuery = { $regex: search, $options: 'i' };

@@ -14,9 +14,10 @@ import { ResponseUtilities } from 'src/utils/response.util';
 import { COMMON_MESSAGE } from 'src/utils/message.enum';
 import { EditDepartmentDto } from './dto/editDepartment.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { FilterQuery } from 'mongoose';
+import mongoose, { FilterQuery } from 'mongoose';
 import { Department } from './department.schema';
 import { ListFilterDto } from 'src/utils/listFilter.dto';
+import { EUserType } from 'src/utils/common';
 
 enum PATH {
   main = 'department',
@@ -60,7 +61,8 @@ export class DepartmentContoller {
   }
 
   @Post(PATH.list)
-  async listDepartment(@Body() body: ListFilterDto) {
+  async listDepartment(@Body() body: ListFilterDto, @Request() req) {
+    const user = req?.user;
     const { currentPage, limit, search, sortOrder, sortParam } = body;
     const skip = ResponseUtilities.calculateSkip(currentPage, limit);
     const match: FilterQuery<Department> = {
@@ -70,6 +72,10 @@ export class DepartmentContoller {
     if (search && search !== '') {
       const searchQuery = { $regex: search, $options: 'i' };
       match['$or'] = [{ name: searchQuery }, { displayName: searchQuery }];
+    }
+
+    if (user.userType === EUserType.Client) {
+      match.companyId = new mongoose.Types.ObjectId(user?.companyId);
     }
 
     const result = await this.departmentService.aggregate([
