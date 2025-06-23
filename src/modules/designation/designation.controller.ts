@@ -110,7 +110,15 @@ export class DesignationContoller {
           localField: 'departmentId',
           foreignField: '_id',
           as: 'department',
-          pipeline: [{ $match: { isActive: true, isDeleted: false } }],
+          pipeline: [
+            { $match: { isActive: true, isDeleted: false } },
+            {
+              $project: {
+                name: 1,
+                displayName: 1,
+              },
+            },
+          ],
         },
       },
       {
