@@ -238,7 +238,7 @@ export class DesignationContoller {
   }
 
   @Post(PATH.changeStatus)
-  async changeStatus(
+  async changeStatusDesignation(
     @Param('id') id: string,
     @Body() data: any,
     @Request() req,

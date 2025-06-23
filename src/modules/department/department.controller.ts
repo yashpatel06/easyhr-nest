@@ -27,6 +27,7 @@ enum PATH {
   edit = 'edit/:id',
   delete = 'delete/:id',
   changeStatus = 'change-status/:id',
+  dropdown = 'dropdown',
 }
 @UseGuards(AuthGuard)
 @Controller(PATH.main)
@@ -173,7 +174,7 @@ export class DepartmentContoller {
   }
 
   @Post(PATH.changeStatus)
-  async changeStatusCompany(
+  async changeStatusDepartment(
     @Param('id') id: string,
     @Body() data: any,
     @Request() req,
@@ -197,6 +198,18 @@ export class DepartmentContoller {
       COMMON_MESSAGE.Success,
       200,
       updateData,
+    );
+  }
+
+  @Post(PATH.dropdown)
+  async dropdownDepartment() {
+    const allDepartment = await this.departmentService.getAllDepartment();
+
+    return ResponseUtilities.responseWrapper(
+      true,
+      COMMON_MESSAGE.Success,
+      200,
+      allDepartment,
     );
   }
 }
