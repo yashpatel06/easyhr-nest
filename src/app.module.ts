@@ -9,6 +9,7 @@ import { RoleModule } from './modules/role/role.module';
 import { DeparatmentModule } from './modules/department/department.module';
 import { DesignationModule } from './modules/designation/designation.module';
 import { PermissionModule } from './modules/permission/permission.module';
+import { UploadController } from './modules/upload/upload.controller';
 
 @Module({
   imports: [
@@ -33,7 +34,7 @@ import { PermissionModule } from './modules/permission/permission.module';
     DeparatmentModule,
     DesignationModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, UploadController],
   providers: [AppService],
 })
 export class AppModule {}

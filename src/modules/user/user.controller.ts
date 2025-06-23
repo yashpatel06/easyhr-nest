@@ -44,22 +44,9 @@ export class UsersController {
 
   @Post(PATH.create)
   @UsePipes(new ValidationPipe())
-  // @UseInterceptors(
-  //   FileInterceptor('profilePic', {
-  //     storage: diskStorage({
-  //       destination: './uploads',
-  //       filename: (req, file, callback) => {
-  //         const uniqueSuffix =
-  //           Date.now() + '-' + Math.round(Math.random() * 1e9);
-  //         const ext = extname(file.originalname);
-  //         callback(null, `user-${uniqueSuffix}${ext}`);
-  //       },
-  //     }),
-  //   }),
-  // )
-  @UseInterceptors(UploadInterceptor('profilePicture', 'uploads'))
+  // @UseInterceptors(UploadInterceptor('profilePicture', 'uploads'))
   async createUser(
-    @UploadedFile() file: Express.Multer.File,
+    // @UploadedFile() file: Express.Multer.File,
     @Body() userData: CreateUserDto,
     @Request() req,
   ) {
@@ -83,7 +70,7 @@ export class UsersController {
     );
     userData.password = hashPassword;
     userData.createdBy = user?._id;
-    userData.profilePicture = file?.path;
+    // userData.profilePicture = file?.path;
     const data = await this.userService.createUser(userData);
     return ResponseUtilities.responseWrapper(
       true,
