@@ -202,8 +202,13 @@ export class DepartmentContoller {
   }
 
   @Post(PATH.dropdown)
-  async dropdownDepartment() {
-    const allDepartment = await this.departmentService.getAllDepartment();
+  async dropdownDepartment(@Request() req) {
+    const user = req?.user;
+    const allDepartment = await this.departmentService.getAllDepartment({
+      companyId: new mongoose.Types.ObjectId(user?.companyId),
+      isActive: true,
+      isDeleted: false,
+    });
 
     return ResponseUtilities.responseWrapper(
       true,

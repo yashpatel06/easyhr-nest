@@ -85,7 +85,7 @@ export class DesignationContoller {
   @Post(PATH.list)
   async listDesignation(@Body() body: ListFilterDto, @Request() req) {
     const user = req?.user;
-    const { currentPage, limit, search, sortOrder, sortParam } = body;
+    const { currentPage, limit, search, sortOrder, sortParam, filters } = body;
     const skip = ResponseUtilities.calculateSkip(currentPage, limit);
     const match: FilterQuery<Designation> = {
       isDeleted: false,
@@ -98,6 +98,14 @@ export class DesignationContoller {
     if (search && search !== '') {
       const searchQuery = { $regex: search, $options: 'i' };
       match['$or'] = [{ name: searchQuery }, { displayName: searchQuery }];
+    }
+
+    if (filters) {
+      const departmentIds = Array.isArray(filters)
+        ? filters.map((id) => new mongoose.Types.ObjectId(id))
+        : [new mongoose.Types.ObjectId(filters)];
+
+      match.departmentId = { $in: departmentIds };
     }
 
     const result = await this.designationService.aggregate([

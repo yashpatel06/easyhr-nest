@@ -30,8 +30,8 @@ export class DepartmentService {
     return this.departmentModel.findByIdAndUpdate(id, data, { new: true });
   }
 
-  async getAllDepartment() {
-    return this.departmentModel.find({ isActive: true, isDeleted: false });
+  async getAllDepartment(filter: FilterQuery<Department>) {
+    return this.departmentModel.find(filter);
   }
 
   async deleteDepartment(id: string, user: any) {
