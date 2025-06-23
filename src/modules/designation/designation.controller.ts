@@ -100,10 +100,10 @@ export class DesignationContoller {
       match['$or'] = [{ name: searchQuery }, { displayName: searchQuery }];
     }
 
-    if (filters) {
-      const departmentIds = Array.isArray(filters)
-        ? filters.map((id) => new mongoose.Types.ObjectId(id))
-        : [new mongoose.Types.ObjectId(filters)];
+    if (filters?.department) {
+      const departmentIds = Array.isArray(filters?.department)
+        ? filters?.department?.map((id) => new mongoose.Types.ObjectId(id))
+        : [new mongoose.Types.ObjectId(filters?.department)];
 
       match.departmentId = { $in: departmentIds };
     }
