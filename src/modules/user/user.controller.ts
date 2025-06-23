@@ -30,6 +30,7 @@ enum PATH {
   main = 'user',
   create = 'create',
   list = 'list',
+  details = 'details/:id',
   edit = 'edit/:id',
   delete = 'delete/:id',
   changeStatus = 'change-status/:id',
@@ -190,6 +191,75 @@ export class UsersController {
       COMMON_MESSAGE.Success,
       200,
       updateUser,
+    );
+  }
+
+  @Post(PATH.details)
+  async detailsUser(@Param('id') id: string) {
+    const [userData] = await this.userService.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(id),
+          isDeleted: false,
+        },
+      },
+      {
+        $lookup: {
+          from: COLLECTIONS.RoleMaster,
+          localField: 'roleId',
+          foreignField: '_id',
+          as: 'role',
+          pipeline: [
+            { $match: { isActive: true, isDeleted: false } },
+            { $project: { name: 1, displayName: 1 } },
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: COLLECTIONS.Department,
+          localField: 'departmentId',
+          foreignField: '_id',
+          as: 'department',
+          pipeline: [
+            { $match: { isActive: true, isDeleted: false } },
+            { $project: { name: 1, displayName: 1 } },
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: COLLECTIONS.Designation,
+          localField: 'designationId',
+          foreignField: '_id',
+          as: 'designation',
+          pipeline: [
+            { $match: { isActive: true, isDeleted: false } },
+            { $project: { name: 1, displayName: 1 } },
+          ],
+        },
+      },
+      {
+        $addFields: {
+          role: { $arrayElemAt: ['$role', 0] },
+          department: { $arrayElemAt: ['$department', 0] },
+          designation: { $arrayElemAt: ['$designation', 0] },
+        },
+      },
+    ]);
+    if (!userData) {
+      return ResponseUtilities.responseWrapper(
+        false,
+        COMMON_MESSAGE.NotFound.replace('{param}', 'Employee'),
+        404,
+      );
+    }
+
+    return ResponseUtilities.responseWrapper(
+      true,
+      COMMON_MESSAGE.Success,
+      200,
+      userData,
     );
   }
 

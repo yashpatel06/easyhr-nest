@@ -20,7 +20,7 @@ import { EditCompanyDto } from './dto/editCompany.dto';
 import mongoose, { FilterQuery } from 'mongoose';
 import { RoleService } from '../role/role.service';
 import { PermissionService } from '../permission/permission.service';
-import { EUserType } from 'src/utils/common';
+import { COLLECTIONS, EUserType } from 'src/utils/common';
 import { UsersService } from '../user/user.service';
 import { ListFilterDto } from 'src/utils/listFilter.dto';
 import { Company } from './company.schema';
@@ -145,6 +145,26 @@ export class CompanyController {
       {
         $match: match,
       },
+      {
+        $lookup: {
+          from: COLLECTIONS.User,
+          localField: '_id',
+          foreignField: 'companyId',
+          as: 'user',
+          pipeline: [
+            { $match: { isActive: true, isDeleted: false } },
+            { $project: { name: 1 } },
+          ],
+        },
+      },
+      {
+        $addFields: {
+          noOfEmployees: { $size: '$user' },
+        },
+      },
+      {
+        $project: { user: 0 },
+      },
       { $sort: { [sortParam]: sortOrder } },
       ...ResponseUtilities.facetStage(skip, limit),
     ]);
@@ -164,11 +184,41 @@ export class CompanyController {
 
   @Post(PATH.details)
   async detailsCompany(@Param('id') id: string) {
-    const companyData = await this.companyService.getCompany({
-      _id: new mongoose.Types.ObjectId(id),
-      // isActive: true,
-      isDeleted: false,
-    });
+    const [companyData] = await this.companyService.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(id),
+          // isActive: true,
+          isDeleted: false,
+        },
+      },
+      {
+        $lookup: {
+          from: COLLECTIONS.User,
+          localField: '_id',
+          foreignField: 'companyId',
+          as: 'user',
+          pipeline: [
+            { $match: { isActive: true, isDeleted: false } },
+            { $project: { name: 1 } },
+          ],
+        },
+      },
+      {
+        $addFields: {
+          noOfEmployees: { $size: '$user' },
+        },
+      },
+      {
+        $project: { user: 0 },
+      },
+    ]);
+
+    // const companyData = await this.companyService.getCompany({
+    //   _id: new mongoose.Types.ObjectId(id),
+    //   // isActive: true,
+    //   isDeleted: false,
+    // });
     if (!companyData) {
       return ResponseUtilities.responseWrapper(
         false,

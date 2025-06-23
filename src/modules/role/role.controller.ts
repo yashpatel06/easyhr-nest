@@ -54,6 +54,7 @@ export class RoleController {
     }
 
     data.createdBy = user?._id;
+    data.companyId = companyId;
     const roleData = await this.roleService.createRole(data);
 
     return ResponseUtilities.responseWrapper(

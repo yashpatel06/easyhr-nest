@@ -73,6 +73,12 @@ export class User extends DbDefaultFields {
   @Prop()
   profilePicture: string;
 
+  @Prop()
+  aadharNumber: string;
+
+  @Prop()
+  panNumber: string;
+
   @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.Company })
   companyId: MongooseSchema.Types.ObjectId;
 

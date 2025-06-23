@@ -92,6 +92,14 @@ export class CreateUserDto {
   @IsOptional()
   permanentPincode?: string;
 
+  @IsString()
+  @IsOptional()
+  aadharNumber?: string;
+
+  @IsString()
+  @IsOptional()
+  panNumber?: string;
+
   @IsArray()
   @IsMongoId({ each: true })
   @IsOptional()
