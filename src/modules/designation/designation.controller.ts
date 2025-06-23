@@ -104,6 +104,21 @@ export class DesignationContoller {
       {
         $match: match,
       },
+      {
+        $lookup: {
+          from: COLLECTIONS.Department,
+          localField: 'departmentId',
+          foreignField: '_id',
+          as: 'department',
+          pipeline: [{ $match: { isActive: true, isDeleted: false } }],
+        },
+      },
+      {
+        $unwind: {
+          path: '$department',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
       { $sort: { [sortParam]: sortOrder } },
       ...ResponseUtilities.facetStage(skip, limit),
     ]);
