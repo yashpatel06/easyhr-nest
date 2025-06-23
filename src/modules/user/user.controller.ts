@@ -70,6 +70,7 @@ export class UsersController {
     );
     userData.password = hashPassword;
     userData.createdBy = user?._id;
+    userData.companyId = user?.companyId;
     // userData.profilePicture = file?.path;
     const data = await this.userService.createUser(userData);
     return ResponseUtilities.responseWrapper(
