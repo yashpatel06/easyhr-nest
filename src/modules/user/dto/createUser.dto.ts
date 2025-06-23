@@ -23,6 +23,7 @@ export class CreateUserDto {
   contactNo: string;
 
   @IsString()
+  @IsOptional()
   alternateContactNo?: string;
 
   @IsMongoId()
