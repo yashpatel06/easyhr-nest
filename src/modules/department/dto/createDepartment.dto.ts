@@ -8,7 +8,8 @@ export class CreateDepartmentDto {
   displayName: string;
 
   @IsMongoId()
-  companyId: string;
+  @IsOptional()
+  companyId?: string;
 
   @IsMongoId()
   @IsOptional()

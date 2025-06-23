@@ -50,6 +50,7 @@ export class DepartmentContoller {
     }
 
     data.createdBy = user?._id;
+    data.companyId = user?.companyId;
     const newData = await this.departmentService.createDepartment(data);
 
     return ResponseUtilities.responseWrapper(

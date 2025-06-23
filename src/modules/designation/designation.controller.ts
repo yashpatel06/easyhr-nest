@@ -71,6 +71,7 @@ export class DesignationContoller {
     }
 
     data.createdBy = user?._id;
+    data.companyId = user?.companyId;
     const newData = await this.designationService.createDesignation(data);
     return ResponseUtilities.responseWrapper(
       true,

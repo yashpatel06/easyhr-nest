@@ -8,9 +8,6 @@ export class EditDesignationDto {
   displayName: string;
 
   @IsMongoId()
-  companyId: string;
-
-  @IsMongoId()
   departmentId: string;
 
   @IsMongoId()

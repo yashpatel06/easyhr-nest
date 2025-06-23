@@ -8,10 +8,11 @@ export class CreateDesignationDto {
   displayName: string;
 
   @IsMongoId()
-  companyId: string;
+  departmentId: string;
 
   @IsMongoId()
-  departmentId: string;
+  @IsOptional()
+  companyId?: string;
 
   @IsMongoId()
   @IsOptional()
