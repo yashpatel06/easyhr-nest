@@ -27,6 +27,7 @@ enum PATH {
   edit = 'edit/:id',
   delete = 'delete/:id',
   changeStatus = 'change-status/:id',
+  dropdown = 'dropdown',
 }
 @UseGuards(AuthGuard)
 @Controller(PATH.main)
@@ -231,6 +232,23 @@ export class RoleController {
       COMMON_MESSAGE.Success,
       200,
       updateData,
+    );
+  }
+
+  @Post(PATH.dropdown)
+  async dropdownRole(@Request() req) {
+    const user = req?.user;
+    const allRoles = await this.roleService.getAllRole({
+      companyId: new mongoose.Types.ObjectId(user?.companyId),
+      isActive: true,
+      isDeleted: false,
+    });
+
+    return ResponseUtilities.responseWrapper(
+      true,
+      COMMON_MESSAGE.Success,
+      200,
+      allRoles,
     );
   }
 }

@@ -19,11 +19,12 @@ import { CreateUserDto } from './dto/createUser.dto';
 import { EditUserDto } from './dto/editUser.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { ListFilterDto } from 'src/utils/listFilter.dto';
-import { FilterQuery } from 'mongoose';
+import mongoose, { FilterQuery } from 'mongoose';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { extname } from 'path';
 import { diskStorage } from 'multer';
 import { UploadInterceptor } from 'src/utils/upload.util';
+import { COLLECTIONS, EUserType } from 'src/utils/common';
 
 enum PATH {
   main = 'user',
@@ -71,6 +72,10 @@ export class UsersController {
     userData.password = hashPassword;
     userData.createdBy = user?._id;
     userData.companyId = user?.companyId;
+
+    if (userData?.userType === EUserType.Client) {
+      userData.userType = EUserType.Client;
+    }
     // userData.profilePicture = file?.path;
     const data = await this.userService.createUser(userData);
     return ResponseUtilities.responseWrapper(
@@ -82,13 +87,17 @@ export class UsersController {
   }
 
   @Post(PATH.list)
-  async getUsers(@Body() body: ListFilterDto) {
+  async getUsers(@Body() body: ListFilterDto, @Request() req) {
+    const user = req?.user;
     const { currentPage, limit, search, sortOrder, sortParam } = body;
     const skip = ResponseUtilities.calculateSkip(currentPage, limit);
     const match: FilterQuery<User> = {
       isDeleted: false,
     };
 
+    if (user?.userType === EUserType.Client) {
+      match.companyId = new mongoose.Types.ObjectId(user?.companyId);
+    }
     if (search && search !== '') {
       const searchQuery = { $regex: search, $options: 'i' };
       match['$or'] = [{ name: searchQuery }];
@@ -97,6 +106,49 @@ export class UsersController {
     const result = await this.userService.aggregate([
       {
         $match: match,
+      },
+      {
+        $lookup: {
+          from: COLLECTIONS.RoleMaster,
+          localField: 'roleId',
+          foreignField: '_id',
+          as: 'role',
+          pipeline: [
+            { $match: { isActive: true, isDeleted: false } },
+            { $project: { name: 1, dispalyName: 1 } },
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: COLLECTIONS.Department,
+          localField: 'departmentId',
+          foreignField: '_id',
+          as: 'department',
+          pipeline: [
+            { $match: { isActive: true, isDeleted: false } },
+            { $project: { name: 1, dispalyName: 1 } },
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: COLLECTIONS.Designation,
+          localField: 'designationId',
+          foreignField: '_id',
+          as: 'designation',
+          pipeline: [
+            { $match: { isActive: true, isDeleted: false } },
+            { $project: { name: 1, dispalyName: 1 } },
+          ],
+        },
+      },
+      {
+        $addFields: {
+          role: { $arrayElemAt: ['$role', 0] },
+          department: { $arrayElemAt: ['$department', 0] },
+          designation: { $arrayElemAt: ['$designation', 0] },
+        },
       },
       { $sort: { [sortParam]: sortOrder } },
       ...ResponseUtilities.facetStage(skip, limit),

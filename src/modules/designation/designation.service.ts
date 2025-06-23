@@ -22,6 +22,10 @@ export class DesignationService {
     return this.designationModel.findOne(filter);
   }
 
+  async getAllDesignation(filter: FilterQuery<Designation>) {
+    return this.designationModel.find(filter);
+  }
+
   async listDesignation() {
     return this.designationModel.find({ isDeleted: false });
   }

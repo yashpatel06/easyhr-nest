@@ -26,7 +26,7 @@ export class CreateUserDto {
   alternateContactNo?: string;
 
   @IsMongoId()
-  roleId: string;
+  roleId?: string;
 
   @IsMongoId()
   @IsOptional()
@@ -37,7 +37,8 @@ export class CreateUserDto {
   designationId?: string;
 
   @IsMongoId()
-  companyId: string;
+  @IsOptional()
+  companyId?: string;
 
   @IsString()
   @IsOptional()

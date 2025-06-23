@@ -29,6 +29,7 @@ enum PATH {
   edit = 'edit/:id',
   delete = 'delete/:id',
   changeStatus = 'change-status/:id',
+  dropdown = 'dropdown',
 }
 @UseGuards(AuthGuard)
 @Controller(PATH.main)
@@ -294,6 +295,51 @@ export class DesignationContoller {
       COMMON_MESSAGE.Success,
       200,
       updateData,
+    );
+  }
+
+  @Post(PATH.dropdown)
+  async dropdownDesignation(@Request() req) {
+    const user = req?.user;
+
+    const allDesignation = await this.designationService.aggregate([
+      {
+        $match: {
+          isActive: true,
+          isDeleted: false,
+          companyId: new mongoose.Types.ObjectId(user?.companyId),
+        },
+      },
+      {
+        $lookup: {
+          from: COLLECTIONS.Department,
+          localField: 'departmentId',
+          foreignField: '_id',
+          as: 'department',
+          pipeline: [
+            { $match: { isActive: true, isDeleted: false } },
+            {
+              $project: {
+                name: 1,
+                displayName: 1,
+              },
+            },
+          ],
+        },
+      },
+      {
+        $unwind: {
+          path: '$department',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+    ]);
+
+    return ResponseUtilities.responseWrapper(
+      true,
+      COMMON_MESSAGE.Success,
+      200,
+      allDesignation,
     );
   }
 }

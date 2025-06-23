@@ -16,6 +16,10 @@ export class RoleService {
     return this.roleModel.findOne(filter);
   }
 
+  async getAllRole(filter: FilterQuery<RoleMaster>) {
+    return this.roleModel.find(filter);
+  }
+
   async createRole(data: CreateRoleDto) {
     const newRole = new this.roleModel(data);
     return newRole.save();
