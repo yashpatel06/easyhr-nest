@@ -23,6 +23,7 @@ enum PATH {
   main = 'department',
   create = 'create',
   list = 'list',
+  details = 'details/:id',
   edit = 'edit/:id',
   delete = 'delete/:id',
   changeStatus = 'change-status/:id',
@@ -97,6 +98,29 @@ export class DepartmentContoller {
       COMMON_MESSAGE.Success,
       200,
       data,
+    );
+  }
+
+  @Post(PATH.details)
+  async detailsDepartment(@Param('id') id: string) {
+    const departmentData = await this.departmentService.getDepartment({
+      _id: new mongoose.Types.ObjectId(id),
+      // isActive: true,
+      isDeleted: false,
+    });
+    if (!departmentData) {
+      return ResponseUtilities.responseWrapper(
+        false,
+        COMMON_MESSAGE.NotFound.replace('{param}', 'Department'),
+        404,
+      );
+    }
+
+    return ResponseUtilities.responseWrapper(
+      true,
+      COMMON_MESSAGE.Success,
+      200,
+      departmentData,
     );
   }
 

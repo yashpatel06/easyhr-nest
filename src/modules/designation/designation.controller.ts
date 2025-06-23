@@ -19,12 +19,13 @@ import { EditDesignationDto } from './dto/editDesignation.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { ListFilterDto } from 'src/utils/listFilter.dto';
 import { Designation } from './designation.schema';
-import { EUserType } from 'src/utils/common';
+import { COLLECTIONS, EUserType } from 'src/utils/common';
 
 enum PATH {
   main = 'designation',
   create = 'create',
   list = 'list',
+  details = 'details/:id',
   edit = 'edit/:id',
   delete = 'delete/:id',
   changeStatus = 'change-status/:id',
@@ -117,6 +118,57 @@ export class DesignationContoller {
       COMMON_MESSAGE.Success,
       200,
       data,
+    );
+  }
+
+  @Post(PATH.details)
+  async detailsDesignation(@Param('id') id: string) {
+    const [designationData] = await this.designationService.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(id),
+        },
+      },
+      {
+        $lookup: {
+          from: COLLECTIONS.Department,
+          localField: 'departmentId',
+          foreignField: '_id',
+          as: 'department',
+          pipeline: [
+            { $match: { isActive: true, isDeleted: false } },
+            {
+              $project: {
+                name: 1,
+                displayName: 1,
+              },
+            },
+          ],
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          dispalyName: 1,
+          isActive: 1,
+          departmentId: 1,
+          department: { $arrayElemAt: ['$department', 0] },
+        },
+      },
+    ]);
+    if (!designationData) {
+      return ResponseUtilities.responseWrapper(
+        false,
+        COMMON_MESSAGE.NotFound.replace('{param}', 'Designation'),
+        404,
+      );
+    }
+
+    return ResponseUtilities.responseWrapper(
+      true,
+      COMMON_MESSAGE.Success,
+      200,
+      designationData,
     );
   }
 
