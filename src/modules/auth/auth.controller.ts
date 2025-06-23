@@ -159,6 +159,7 @@ export class AuthController {
           department: { $arrayElemAt: ['$department.name', 0] },
           designation: { $arrayElemAt: ['$designation.name', 0] },
           company: { $arrayElemAt: ['$company.name', 0] },
+          companyLogo: { $arrayElemAt: ['$company.companyLogo', 0] },
           permissions: { $arrayElemAt: ['$role.permissions', 0] },
         },
       },
