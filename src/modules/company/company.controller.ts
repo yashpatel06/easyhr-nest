@@ -103,7 +103,7 @@ export class CompanyController {
 
     const password = await this.authService.hashPassword('123456');
     const createUser = await this.userService.createUser({
-      name: newData.ownerName,
+      firstName: newData.ownerName,
       email: newData.email,
       password: password,
       contactNo: newData.contactNo,
