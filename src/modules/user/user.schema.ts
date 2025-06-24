@@ -82,6 +82,21 @@ export class User extends DbDefaultFields {
   @Prop()
   panNumber: string;
 
+  @Prop()
+  emergnacyContactName: string;
+
+  @Prop()
+  emergnacyContactNumber: string;
+
+  @Prop()
+  bankName: string;
+
+  @Prop()
+  bankAccountNumber: string;
+
+  @Prop()
+  bankIfscCode: string;
+
   @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.Company })
   companyId: MongooseSchema.Types.ObjectId;
 

@@ -109,6 +109,26 @@ export class EditUserDto {
   @IsOptional()
   panNumber?: string;
 
+  @IsString()
+  @IsOptional()
+  emergnacyContactName?: string;
+
+  @IsString()
+  @IsOptional()
+  emergnacyContactNumber?: string;
+
+  @IsString()
+  @IsOptional()
+  bankName?: string;
+
+  @IsString()
+  @IsOptional()
+  bankAccountNumber?: string;
+
+  @IsString()
+  @IsOptional()
+  bankIfscCode?: string;
+
   @IsArray()
   @IsMongoId({ each: true })
   @IsOptional()
