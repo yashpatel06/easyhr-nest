@@ -82,7 +82,7 @@ export class UsersController {
       employeeId = `${companyData?.companyCode}-${nextNumber}`; // e.g., GOO-005
     }
 
-    const plainPassword = userData.password;
+    const plainPassword = '123456';
     const hashPassword = await this.authService.hashPassword(
       plainPassword ?? '',
     );
