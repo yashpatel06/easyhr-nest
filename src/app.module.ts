@@ -10,6 +10,7 @@ import { DeparatmentModule } from './modules/department/department.module';
 import { DesignationModule } from './modules/designation/designation.module';
 import { PermissionModule } from './modules/permission/permission.module';
 import { UploadController } from './modules/upload/upload.controller';
+import { LeaveTypeModule } from './modules/leaveType/leaveType.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { UploadController } from './modules/upload/upload.controller';
     RoleModule,
     DeparatmentModule,
     DesignationModule,
+    LeaveTypeModule,
   ],
   controllers: [AppController, UploadController],
   providers: [AppService],
