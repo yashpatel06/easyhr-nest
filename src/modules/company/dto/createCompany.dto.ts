@@ -5,6 +5,9 @@ export class CreateCompanyDto {
   name: string;
 
   @IsString()
+  companyCode: string;
+
+  @IsString()
   @IsEmail()
   email: string;
 

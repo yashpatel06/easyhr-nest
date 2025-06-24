@@ -25,6 +25,7 @@ import { extname } from 'path';
 import { diskStorage } from 'multer';
 import { UploadInterceptor } from 'src/utils/upload.util';
 import { COLLECTIONS, EUserType } from 'src/utils/common';
+import { CompanyService } from '../company/company.service';
 
 enum PATH {
   main = 'user',
@@ -41,6 +42,7 @@ enum PATH {
 export class UsersController {
   constructor(
     private userService: UsersService,
+    private companyService: CompanyService,
     private authService: AuthService,
   ) {}
 
@@ -53,6 +55,7 @@ export class UsersController {
     @Request() req,
   ) {
     const user = req?.user;
+    const companyId = user?.companyId;
     const oldUser = await this.userService.getUser({
       email: userData.email,
       // isActive: true,
@@ -66,13 +69,27 @@ export class UsersController {
       );
     }
 
+    const companyData = await this.companyService.getCompany({
+      _id: new mongoose.Types.ObjectId(companyId),
+    });
+
+    let employeeId;
+    if (companyData) {
+      const count = await this.userService.countDocuments({
+        companyId: new mongoose.Types.ObjectId(companyId),
+      });
+      const nextNumber = (count + 1).toString().padStart(3, '0'); // e.g., 005
+      employeeId = `${companyData?.companyCode}-${nextNumber}`; // e.g., GOO-005
+    }
+
     const plainPassword = userData.password;
     const hashPassword = await this.authService.hashPassword(
       plainPassword ?? '',
     );
     userData.password = hashPassword;
     userData.createdBy = user?._id;
-    userData.companyId = user?.companyId;
+    userData.companyId = companyId;
+    userData.employeeId = employeeId;
 
     if (userData?.userType === EUserType.Client) {
       userData.userType = EUserType.Client;

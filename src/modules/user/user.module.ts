@@ -5,6 +5,7 @@ import { UserSchema } from './user.schema';
 import { UsersService } from './user.service';
 import { UsersController } from './user.controller';
 import { AuthModule } from '../auth/auth.module';
+import { CompanyModule } from '../company/company.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AuthModule } from '../auth/auth.module';
       },
     ]),
     forwardRef(() => AuthModule),
+    forwardRef(() => CompanyModule),
   ],
   providers: [UsersService],
   controllers: [UsersController],

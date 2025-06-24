@@ -8,6 +8,9 @@ export class Company extends DbDefaultFields {
   name: string;
 
   @Prop()
+  companyCode: string;
+
+  @Prop()
   email: string;
 
   @Prop()

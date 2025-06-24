@@ -20,6 +20,9 @@ export class User extends DbDefaultFields {
   email: string;
 
   @Prop()
+  employeeId: string;
+
+  @Prop()
   password: string;
 
   @Prop()

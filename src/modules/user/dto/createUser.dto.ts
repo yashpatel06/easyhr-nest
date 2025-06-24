@@ -23,6 +23,10 @@ export class CreateUserDto {
   password?: string;
 
   @IsString()
+  @IsOptional()
+  employeeId?: string;
+
+  @IsString()
   contactNo: string;
 
   @IsString()

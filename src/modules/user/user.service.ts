@@ -49,4 +49,8 @@ export class UsersService {
   async aggregate(pipeline: PipelineStage[]) {
     return this.userModel.aggregate(pipeline);
   }
+
+  async countDocuments(filter: any) {
+    return this.userModel.countDocuments(filter);
+  }
 }

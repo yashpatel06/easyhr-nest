@@ -81,6 +81,10 @@ export class CompanyController {
       );
     }
 
+    const count = 0;
+    const nextNumber = (count + 1).toString().padStart(3, '0'); // e.g., 005
+    const employeeId = `${newData?.companyCode}-${nextNumber}`; // e.g., GOO-005
+
     const permissions = await this.permissionService.getAllPermission();
     const permissionIds = permissions?.map((e) => e?._id.toString());
 
@@ -105,6 +109,7 @@ export class CompanyController {
     const createUser = await this.userService.createUser({
       firstName: newData.ownerName,
       email: newData.email,
+      employeeId: employeeId,
       password: password,
       contactNo: newData.contactNo,
       alternateContactNo: newData.alternateContactNo,

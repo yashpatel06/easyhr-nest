@@ -27,6 +27,10 @@ export class EditUserDto {
 
   @IsString()
   @IsOptional()
+  employeeId?: string;
+
+  @IsString()
+  @IsOptional()
   contactNo?: string;
 
   @IsString()

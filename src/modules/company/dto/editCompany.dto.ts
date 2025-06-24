@@ -12,6 +12,10 @@ export class EditCompanyDto {
   name?: string;
 
   @IsString()
+  @IsOptional()
+  companyCode?: string;
+
+  @IsString()
   @IsEmail()
   @IsOptional()
   email?: string;
