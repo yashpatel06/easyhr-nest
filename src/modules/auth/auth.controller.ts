@@ -147,7 +147,8 @@ export class AuthController {
       },
       {
         $project: {
-          name: 1,
+          firstName: 1,
+          lastName: 1,
           email: 1,
           contactNo: 1,
           userType: 1,

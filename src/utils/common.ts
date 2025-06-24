@@ -17,6 +17,8 @@ export const COLLECTIONS = {
 export enum EGender {
   Male = 'male',
   Female = 'female',
+  Other = 'other',
+  PreferNotToSay = 'prefer not to say',
 }
 
 export enum EUserType {

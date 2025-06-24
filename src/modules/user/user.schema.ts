@@ -11,7 +11,10 @@ import { DbDefaultFields } from 'src/utils/dbDefault.schema';
 @Schema({ ...dcSchemaOptions, collection: COLLECTIONS.User })
 export class User extends DbDefaultFields {
   @Prop()
-  name: string;
+  firstName: string;
+
+  @Prop()
+  lastName: string;
 
   @Prop()
   email: string;
