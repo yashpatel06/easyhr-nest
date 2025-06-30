@@ -13,6 +13,7 @@ export const COLLECTIONS = {
   Department: 'department',
   Designation: 'designation',
   LeaveType: 'leave_type',
+  EmployeeLeave: 'employee_leave',
 };
 
 export enum EGender {
@@ -25,4 +26,10 @@ export enum EGender {
 export enum EUserType {
   System = 'System',
   Client = 'Client',
+}
+
+export enum ELeaveStatus {
+  Pending = 'Pending',
+  Approved = 'Approved',
+  Cancelled = 'Cancelled',
 }

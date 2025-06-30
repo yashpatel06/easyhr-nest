@@ -126,6 +126,7 @@ export class DepartmentContoller {
   }
 
   @Post(PATH.edit)
+  @UsePipes(new ValidationPipe())
   async editDepartment(
     @Param('id') id: string,
     @Body() data: EditDepartmentDto,

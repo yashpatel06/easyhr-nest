@@ -11,6 +11,7 @@ import { DesignationModule } from './modules/designation/designation.module';
 import { PermissionModule } from './modules/permission/permission.module';
 import { UploadController } from './modules/upload/upload.controller';
 import { LeaveTypeModule } from './modules/leaveType/leaveType.module';
+import { EmployeeLeaveModule } from './modules/employeeLeave/employeeLeave.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { LeaveTypeModule } from './modules/leaveType/leaveType.module';
     DeparatmentModule,
     DesignationModule,
     LeaveTypeModule,
+    EmployeeLeaveModule,
   ],
   controllers: [AppController, UploadController],
   providers: [AppService],
