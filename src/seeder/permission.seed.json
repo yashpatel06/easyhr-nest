@@ -84,5 +84,45 @@
     "name": "list_department",
     "displayName": "List Department",
     "group": "department"
+  },
+  {
+    "name": "add_leave_type",
+    "displayName": "Add Leave Type",
+    "group": "leave_type"
+  },
+  {
+    "name": "edit_leave_type",
+    "displayName": "Edit Leave Type",
+    "group": "leave_type"
+  },
+  {
+    "name": "delete_leave_type",
+    "displayName": "Delete Leave Type",
+    "group": "leave_type"
+  },
+  {
+    "name": "list_leave_type",
+    "displayName": "List Leave Type",
+    "group": "leave_type"
+  },
+  {
+    "name": "add_employee_leave",
+    "displayName": "Add Employee Leave",
+    "group": "employee_leave"
+  },
+  {
+    "name": "edit_employee_leave",
+    "displayName": "Edit Employee Leave",
+    "group": "employee_leave"
+  },
+  {
+    "name": "delete_employee_leave",
+    "displayName": "Delete Employee Leave",
+    "group": "employee_leave"
+  },
+  {
+    "name": "list_employee_leave",
+    "displayName": "List Employee Leave",
+    "group": "employee_leave"
   }
 ]

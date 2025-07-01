@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 import { PermissionMasterSchema } from 'src/modules/permission/permission.schema';
-import { COLLECTIONS } from 'src/utils/common';
+import { COLLECTIONS, EUserType } from 'src/utils/common';
 import * as permissions from 'src/seeder/permission.seed.json';
+import { UserSchema } from 'src/modules/user/user.schema';
+import { RoleMasterSchema } from 'src/modules/role/role.schema';
 
 export async function seedPermissions() {
   try {
@@ -10,6 +12,13 @@ export async function seedPermissions() {
       PermissionMasterSchema,
       COLLECTIONS.PermissionMaster,
     );
+
+    const RoleMasterModel = mongoose.model(
+      'RoleMaster',
+      RoleMasterSchema,
+      COLLECTIONS.RoleMaster,
+    );
+
     for (const permission of permissions) {
       const exists = await PermissionMasterModel.findOne({
         name: permission.name,
@@ -21,6 +30,24 @@ export async function seedPermissions() {
         // console.log(`⚠️ Already exists: ${permission.name}`);
       }
     }
+
+    const permissionData = await PermissionMasterModel.find(
+      { isActive: true, isDeleted: false },
+      { _id: 1 },
+    ).lean();
+    const permissionIds = permissionData?.map((p) => p._id);
+
+    // Add all permission to super admin role
+    await RoleMasterModel.findOneAndUpdate(
+      {
+        name: 'Super Admin',
+        roleType: EUserType.System,
+        isActive: true,
+        isDeleted: false,
+      },
+      { $set: { permissionIds } },
+      { new: true },
+    );
 
     console.log('🎉 Permission seeding completed.');
   } catch (err) {
