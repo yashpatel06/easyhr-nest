@@ -202,5 +202,11 @@
     "displayName": "List Employee Leave",
     "group": "employee_leave",
     "permissionType": ["Client"]
+  },
+  {
+    "name": "action_employee_leave",
+    "displayName": "Action Employee Leave",
+    "group": "employee_leave",
+    "permissionType": ["Client"]
   }
 ]

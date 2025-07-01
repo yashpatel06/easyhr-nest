@@ -88,7 +88,7 @@ export class CompanyController {
     const permissions = await this.permissionService.getAllPermission({
       isActive: true,
       isDeleted: false,
-      permissionType: { $in: [user?.userType] },
+      permissionType: { $in: [EUserType.Client] },
     });
     const permissionIds = permissions?.map((e) => e?._id.toString());
 
