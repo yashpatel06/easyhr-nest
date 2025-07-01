@@ -85,7 +85,11 @@ export class CompanyController {
     const nextNumber = (count + 1).toString().padStart(3, '0'); // e.g., 005
     const employeeId = `${newData?.companyCode}-${nextNumber}`; // e.g., GOO-005
 
-    const permissions = await this.permissionService.getAllPermission();
+    const permissions = await this.permissionService.getAllPermission({
+      isActive: true,
+      isDeleted: false,
+      permissionType: { $in: [user?.userType] },
+    });
     const permissionIds = permissions?.map((e) => e?._id.toString());
 
     const creatRole = await this.roleService.createRole({
