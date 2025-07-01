@@ -61,6 +61,7 @@ export class EmployeeLeaveController {
     }
 
     data.createdBy = user?._id;
+    data.userId = user?._id;
     data.companyId = companyId;
     const newLeaveData =
       await this.employeeLeaveService.createEmployeeLeave(data);
@@ -126,6 +127,8 @@ export class EmployeeLeaveController {
     const match: FilterQuery<EmployeeLeave> = {
       isActive: true,
       isDeleted: false,
+      userId: new mongoose.Types.ObjectId(user?._id),
+      companyId: new mongoose.Types.ObjectId(user?.companyId),
     };
 
     if (user.userType === EUserType.Client) {
