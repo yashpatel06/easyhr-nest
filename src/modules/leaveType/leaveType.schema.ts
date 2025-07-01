@@ -12,7 +12,7 @@ export class LeaveType extends DbDefaultFields {
   displayName: string;
 
   @Prop()
-  discription: string;
+  description: string;
 
   @Prop({ type: Boolean, default: false })
   isDefault: boolean;

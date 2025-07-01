@@ -11,7 +11,7 @@ export class EditLeaveTypeDto {
 
   @IsString()
   @IsOptional()
-  discription?: string;
+  description?: string;
 
   @IsBoolean()
   @IsOptional()
