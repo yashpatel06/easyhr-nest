@@ -11,6 +11,9 @@ export class LeaveType extends DbDefaultFields {
   @Prop()
   displayName: string;
 
+  @Prop()
+  discription: string;
+
   @Prop({ type: Boolean, default: false })
   isDefault: boolean;
 

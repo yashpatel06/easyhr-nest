@@ -7,6 +7,9 @@ export class CreateLeaveTypeDto {
   @IsString()
   displayName: string;
 
+  @IsString()
+  discription: string;
+
   @IsBoolean()
   @IsOptional()
   isDefault?: boolean;

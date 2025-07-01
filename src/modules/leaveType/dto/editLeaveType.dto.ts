@@ -9,6 +9,10 @@ export class EditLeaveTypeDto {
   @IsOptional()
   displayName?: string;
 
+  @IsString()
+  @IsOptional()
+  discription?: string;
+
   @IsBoolean()
   @IsOptional()
   isDefault?: boolean;
