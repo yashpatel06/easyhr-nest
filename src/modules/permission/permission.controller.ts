@@ -3,6 +3,7 @@ import {
   Controller,
   Param,
   Post,
+  Req,
   Request,
   UseGuards,
   UsePipes,
@@ -100,8 +101,13 @@ export class PermissionController {
   }
 
   @Post(PATH.getAll)
-  async getAllPermission() {
-    const allPermissions = await this.permissionService.getAllPermission();
+  async getAllPermission(@Request() req) {
+    const user = req?.user;
+    const allPermissions = await this.permissionService.getAllPermission({
+      isActive: true,
+      isDeleted: false,
+      permissionType: { $in: [user?.userType] },
+    });
     return ResponseUtilities.responseWrapper(
       true,
       COMMON_MESSAGE.Success,

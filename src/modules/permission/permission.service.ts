@@ -22,8 +22,8 @@ export class PermissionService {
     return this.permissionModel.find({ isDeleted: false });
   }
 
-  async getAllPermission() {
-    return this.permissionModel.find({ isActive: true, isDeleted: false });
+  async getAllPermission(filter: FilterQuery<PermissionMaster>) {
+    return this.permissionModel.find(filter);
   }
 
   async getPermission(filter: FilterQuery<PermissionMaster>) {

@@ -3,126 +3,204 @@
     "name": "view_dashboard",
     "displayName": "View Dashboard",
     "group": "dashboard",
-    "permissionType": "Client"
+    "permissionType": ["Client", "System"]
+  },
+  {
+    "name": "add_company",
+    "displayName": "Add Company",
+    "group": "company",
+    "permissionType": ["System"]
+  },
+  {
+    "name": "edit_company",
+    "displayName": "Edit Company",
+    "group": "company",
+    "permissionType": ["System"]
+  },
+  {
+    "name": "delete_company",
+    "displayName": "Delete Company",
+    "group": "company",
+    "permissionType": ["System"]
+  },
+  {
+    "name": "list_company",
+    "displayName": "List Company",
+    "group": "company",
+    "permissionType": ["System"]
+  },
+  {
+    "name": "add_permission",
+    "displayName": "Add Permission",
+    "group": "compermissionpany",
+    "permissionType": ["System"]
+  },
+  {
+    "name": "edit_permission",
+    "displayName": "Edit Permission",
+    "group": "permission",
+    "permissionType": ["System"]
+  },
+  {
+    "name": "delete_permission",
+    "displayName": "Delete Permission",
+    "group": "permission",
+    "permissionType": ["System"]
+  },
+  {
+    "name": "list_permission",
+    "displayName": "List Permission",
+    "group": "permission",
+    "permissionType": ["System"]
+  },
+  {
+    "name": "view_user",
+    "displayName": "View User",
+    "group": "user",
+    "permissionType": ["Client", "System"]
   },
   {
     "name": "add_user",
     "displayName": "Add User",
-    "group": "user"
+    "group": "user",
+    "permissionType": ["Client", "System"]
   },
   {
     "name": "edit_user",
     "displayName": "Edit User",
-    "group": "user"
+    "group": "user",
+    "permissionType": ["Client", "System"]
   },
   {
     "name": "delete_user",
     "displayName": "Delete User",
-    "group": "user"
+    "group": "user",
+    "permissionType": ["Client", "System"]
   },
   {
     "name": "list_user",
     "displayName": "List Users",
-    "group": "user"
+    "group": "user",
+    "permissionType": ["Client", "System"]
   },
   {
     "name": "add_role",
     "displayName": "Add Role",
-    "group": "role"
+    "group": "role",
+    "permissionType": ["Client", "System"]
   },
   {
     "name": "edit_role",
     "displayName": "Edit Role",
-    "group": "role"
+    "group": "role",
+    "permissionType": ["Client", "System"]
   },
   {
     "name": "delete_role",
     "displayName": "Delete Role",
-    "group": "role"
+    "group": "role",
+    "permissionType": ["Client", "System"]
   },
   {
     "name": "list_role",
     "displayName": "List Roles",
-    "group": "role"
+    "group": "role",
+    "permissionType": ["Client", "System"]
   },
   {
     "name": "add_designation",
     "displayName": "Add Designation",
-    "group": "designation"
+    "group": "designation",
+    "permissionType": ["Client"]
   },
   {
     "name": "edit_designation",
     "displayName": "Edit Designation",
-    "group": "designation"
+    "group": "designation",
+    "permissionType": ["Client"]
   },
   {
     "name": "delete_designation",
     "displayName": "Delete Designation",
-    "group": "designation"
+    "group": "designation",
+    "permissionType": ["Client"]
   },
   {
     "name": "list_designation",
     "displayName": "List Designations",
-    "group": "designation"
+    "group": "designation",
+    "permissionType": ["Client"]
   },
   {
     "name": "add_department",
     "displayName": "Add Department",
-    "group": "department"
+    "group": "department",
+    "permissionType": ["Client"]
   },
   {
     "name": "edit_department",
     "displayName": "Edit Department",
-    "group": "department"
+    "group": "department",
+    "permissionType": ["Client"]
   },
   {
     "name": "delete_department",
     "displayName": "Delete Department",
-    "group": "department"
+    "group": "department",
+    "permissionType": ["Client"]
   },
   {
     "name": "list_department",
     "displayName": "List Department",
-    "group": "department"
+    "group": "department",
+    "permissionType": ["Client"]
   },
   {
     "name": "add_leave_type",
     "displayName": "Add Leave Type",
-    "group": "leave_type"
+    "group": "leave_type",
+    "permissionType": ["Client"]
   },
   {
     "name": "edit_leave_type",
     "displayName": "Edit Leave Type",
-    "group": "leave_type"
+    "group": "leave_type",
+    "permissionType": ["Client"]
   },
   {
     "name": "delete_leave_type",
     "displayName": "Delete Leave Type",
-    "group": "leave_type"
+    "group": "leave_type",
+    "permissionType": ["Client"]
   },
   {
     "name": "list_leave_type",
     "displayName": "List Leave Type",
-    "group": "leave_type"
+    "group": "leave_type",
+    "permissionType": ["Client"]
   },
   {
     "name": "add_employee_leave",
     "displayName": "Add Employee Leave",
-    "group": "employee_leave"
+    "group": "employee_leave",
+    "permissionType": ["Client"]
   },
   {
     "name": "edit_employee_leave",
     "displayName": "Edit Employee Leave",
-    "group": "employee_leave"
+    "group": "employee_leave",
+    "permissionType": ["Client"]
   },
   {
     "name": "delete_employee_leave",
     "displayName": "Delete Employee Leave",
-    "group": "employee_leave"
+    "group": "employee_leave",
+    "permissionType": ["Client"]
   },
   {
     "name": "list_employee_leave",
     "displayName": "List Employee Leave",
-    "group": "employee_leave"
+    "group": "employee_leave",
+    "permissionType": ["Client"]
   }
 ]

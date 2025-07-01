@@ -32,7 +32,11 @@ export async function seedPermissions() {
     }
 
     const permissionData = await PermissionMasterModel.find(
-      { isActive: true, isDeleted: false },
+      {
+        isActive: true,
+        isDeleted: false,
+        permissionType: { $in: [EUserType.System] },
+      },
       { _id: 1 },
     ).lean();
     const permissionIds = permissionData?.map((p) => p._id);

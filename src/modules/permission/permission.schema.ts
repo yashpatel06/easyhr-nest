@@ -13,8 +13,8 @@ export class PermissionMaster extends DbDefaultFields {
   @Prop()
   group: string;
 
-  // @Prop({ type: Schema, enum: EUserType })
-  // permissionType: string;
+  @Prop({ type: [String], enum: EUserType })
+  permissionType: string[];
 }
 
 export const PermissionMasterSchema =
