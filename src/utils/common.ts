@@ -33,3 +33,13 @@ export enum ELeaveStatus {
   Approved = 'Approved',
   Cancelled = 'Cancelled',
 }
+
+export enum ELeaveDayType {
+  HalfDay = 'Half Day',
+  FullDay = 'Full Day',
+}
+
+export enum ELeaveHalfDayType {
+  FirstHalf = 'First Half',
+  SecondHalf = 'Second Half',
+}

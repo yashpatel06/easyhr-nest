@@ -15,7 +15,15 @@ export class EditEmployeeLeaveDto {
 
   @IsString()
   @IsOptional()
-  reason: string;
+  reason?: string;
+
+  @IsString()
+  @IsOptional()
+  dayType?: string;
+
+  @IsString()
+  @IsOptional()
+  halfDayType?: string;
 
   @IsMongoId()
   @IsOptional()
