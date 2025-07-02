@@ -21,7 +21,8 @@ export class CreateEmployeeLeaveDto {
   dayType: string;
 
   @IsString()
-  halfDayType: string;
+  @IsOptional()
+  halfDayType?: string;
 
   @IsMongoId()
   @IsOptional()
