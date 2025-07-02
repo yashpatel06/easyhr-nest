@@ -50,6 +50,9 @@ export class User extends DbDefaultFields {
   dob: Date;
 
   @Prop()
+  bloodGroup: string;
+
+  @Prop()
   dateOfJoining: Date;
 
   @Prop()

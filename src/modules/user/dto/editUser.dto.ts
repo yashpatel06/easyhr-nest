@@ -59,6 +59,10 @@ export class EditUserDto {
 
   @IsString()
   @IsOptional()
+  bloodGroup?: String;
+
+  @IsString()
+  @IsOptional()
   dob?: Date;
 
   @IsString()

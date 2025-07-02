@@ -54,6 +54,10 @@ export class CreateUserDto {
 
   @IsString()
   @IsOptional()
+  bloodGroup?: String;
+
+  @IsString()
+  @IsOptional()
   dob?: Date;
 
   @IsString()
