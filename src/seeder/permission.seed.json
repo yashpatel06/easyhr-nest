@@ -156,27 +156,51 @@
     "permissionType": ["Client"]
   },
   {
-    "name": "add_leave_type",
-    "displayName": "Add Leave Type",
-    "group": "leave_type",
+    "name": "add_leave_type_master",
+    "displayName": "Add Leave Type Master",
+    "group": "leave_type_master",
+    "permissionType": ["System"]
+  },
+  {
+    "name": "edit_leave_type_master",
+    "displayName": "Edit Leave Type Master",
+    "group": "leave_type_master",
+    "permissionType": ["System"]
+  },
+  {
+    "name": "delete_leave_type_master",
+    "displayName": "Delete Leave Type Master",
+    "group": "leave_type_master",
+    "permissionType": ["System"]
+  },
+  {
+    "name": "list_leave_type_master",
+    "displayName": "List Leave Type Master",
+    "group": "leave_type_master",
+    "permissionType": ["System"]
+  },
+  {
+    "name": "add_company_leave_type",
+    "displayName": "Add Company Leave Type",
+    "group": "company_leave_type",
     "permissionType": ["Client"]
   },
   {
-    "name": "edit_leave_type",
-    "displayName": "Edit Leave Type",
-    "group": "leave_type",
+    "name": "edit_company_leave_type",
+    "displayName": "Edit Company Leave Type",
+    "group": "company_leave_type",
     "permissionType": ["Client"]
   },
   {
-    "name": "delete_leave_type",
-    "displayName": "Delete Leave Type",
-    "group": "leave_type",
+    "name": "delete_company_leave_type",
+    "displayName": "Delete Company Leave Type",
+    "group": "company_leave_type",
     "permissionType": ["Client"]
   },
   {
-    "name": "list_leave_type",
-    "displayName": "List Leave Type",
-    "group": "leave_type",
+    "name": "list_company_leave_type",
+    "displayName": "List Company Leave Type",
+    "group": "company_leave_type",
     "permissionType": ["Client"]
   },
   {

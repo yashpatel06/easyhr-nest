@@ -13,12 +13,12 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { CreateEmployeeLeaveDto } from './dto/createEmployeeLeave.dto';
 import { ResponseUtilities } from 'src/utils/response.util';
 import { COMMON_MESSAGE } from 'src/utils/message.enum';
-import { LeaveTypeService } from '../leaveType/leaveType.service';
 import mongoose, { FilterQuery } from 'mongoose';
 import { EditEmployeeLeaveDto } from './dto/editEmployeeLeave.dto';
 import { ListFilterDto } from 'src/utils/listFilter.dto';
 import { EmployeeLeave } from './employeeLeave.schema';
 import { COLLECTIONS, EUserType } from 'src/utils/common';
+import { CompanyLeaveTypeService } from '../companyLeaveType/companyLeaveType.service';
 
 enum PATH {
   main = 'employee-leave',
@@ -35,7 +35,7 @@ enum PATH {
 export class EmployeeLeaveController {
   constructor(
     private employeeLeaveService: EmployeeLeaveService,
-    private leaveTypeService: LeaveTypeService,
+    private companyLeaveTypeService: CompanyLeaveTypeService,
   ) {}
 
   @Post(PATH.create)
@@ -47,8 +47,8 @@ export class EmployeeLeaveController {
     const user = req?.user;
     const companyId = user?.companyId;
 
-    const leaveType = await this.leaveTypeService.getLeaveType({
-      _id: new mongoose.Types.ObjectId(data?.leaveTypeId),
+    const leaveType = await this.companyLeaveTypeService.getCompanyLeaveType({
+      _id: new mongoose.Types.ObjectId(data?.companyLeaveTypeId),
       isActive: true,
       isDeleted: false,
     });
@@ -84,9 +84,9 @@ export class EmployeeLeaveController {
     const user = req?.user;
     data.updatedBy = user?._id;
 
-    if (data?.leaveTypeId) {
-      const leaveType = await this.leaveTypeService.getLeaveType({
-        _id: new mongoose.Types.ObjectId(data?.leaveTypeId),
+    if (data?.companyLeaveTypeId) {
+      const leaveType = await this.companyLeaveTypeService.getCompanyLeaveType({
+        _id: new mongoose.Types.ObjectId(data?.companyLeaveTypeId),
         isActive: true,
         isDeleted: false,
       });
@@ -139,7 +139,7 @@ export class EmployeeLeaveController {
       { $match: match },
       {
         $lookup: {
-          from: COLLECTIONS.LeaveType,
+          from: COLLECTIONS.LeaveTypeMaster,
           localField: 'leaveTypeId',
           foreignField: '_id',
           as: 'leaveType',
@@ -191,10 +191,10 @@ export class EmployeeLeaveController {
       },
       {
         $lookup: {
-          from: COLLECTIONS.LeaveType,
-          localField: 'leaveTypeId',
+          from: COLLECTIONS.CompanyLeaveType,
+          localField: 'companyLeaveTypeId',
           foreignField: '_id',
-          as: 'leaveType',
+          as: 'companyLeaveType',
           pipeline: [{ $project: { name: 1, displayName: 1 } }],
         },
       },
@@ -209,7 +209,7 @@ export class EmployeeLeaveController {
       },
       {
         $addFields: {
-          leaveType: { $arrayElemAt: ['$leaveType', 0] },
+          leaveType: { $arrayElemAt: ['$companyLeaveType', 0] },
           actionBy: { $arrayElemAt: ['$actionBy', 0] },
         },
       },

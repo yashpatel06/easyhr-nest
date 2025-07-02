@@ -9,18 +9,18 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { LeaveTypeService } from './leaveType.service';
-import { CreateLeaveTypeDto } from './dto/createLeaveType.dto';
+import { CompanyLeaveTypeService } from './companyLeaveType.service';
+import { CreateCompanyLeaveTypeDto } from './dto/createCompanyLeaveType';
 import mongoose, { FilterQuery } from 'mongoose';
 import { ResponseUtilities } from 'src/utils/response.util';
 import { COMMON_MESSAGE } from 'src/utils/message.enum';
 import { ListFilterDto } from 'src/utils/listFilter.dto';
-import { LeaveType } from './leaveType.schema';
+import { CompanyLeaveType } from './companyLeaveType.schema';
 import { EUserType } from 'src/utils/common';
-import { EditLeaveTypeDto } from './dto/editLeaveType.dto';
+import { EditCompanyLeaveTypeDto } from './dto/editCompanyLeaveType';
 
 enum PATH {
-  main = 'leave-type',
+  main = 'company-leave-type',
   create = 'create',
   list = 'list',
   details = 'details/:id',
@@ -32,33 +32,34 @@ enum PATH {
 
 @UseGuards(AuthGuard)
 @Controller(PATH.main)
-export class LeaveTypeController {
-  constructor(private leaveTypeService: LeaveTypeService) {}
+export class CompanyLeaveTypeController {
+  constructor(private companyLeaveTypeService: CompanyLeaveTypeService) {}
 
   @Post(PATH.create)
   @UsePipes(new ValidationPipe())
-  async createLeaveType(@Body() data: CreateLeaveTypeDto, @Request() req) {
-    const user = req.user;
-    const companyId = user?.companyId;
-    console.log('companyId', companyId);
-    const oldData = await this.leaveTypeService.getLeaveType({
+  async createCompanyLeaveType(
+    @Body() data: CreateCompanyLeaveTypeDto,
+    @Request() req,
+  ) {
+    const user = req?.user;
+
+    const oldData = await this.companyLeaveTypeService.getCompanyLeaveType({
       name: data?.name,
-      companyId: { $eq: new mongoose.Types.ObjectId(companyId) },
+      companyId: { $eq: new mongoose.Types.ObjectId(user?.companyId) },
       // isActive: true,
       isDeleted: false,
     });
-    console.log('oldData', oldData);
     if (oldData) {
       return ResponseUtilities.responseWrapper(
         false,
-        COMMON_MESSAGE.AlreadyExist.replace('{param}', 'Leave Type'),
+        COMMON_MESSAGE.AlreadyExist.replace('{param}', 'Company Leave Type'),
         400,
       );
     }
 
     data.createdBy = user?._id;
-    data.companyId = companyId;
-    const leaveTypeData = await this.leaveTypeService.createLeaveType(data);
+    const leaveTypeData =
+      await this.companyLeaveTypeService.createCompanyLeaveType(data);
 
     return ResponseUtilities.responseWrapper(
       true,
@@ -69,11 +70,11 @@ export class LeaveTypeController {
   }
 
   @Post(PATH.list)
-  async listLeaveType(@Body() body: ListFilterDto, @Request() req) {
+  async listCompanyLeaveType(@Body() body: ListFilterDto, @Request() req) {
     const user = req?.user;
-    const { currentPage, limit, search, sortOrder, sortParam } = body;
+    const { currentPage, limit, search, sortOrder, sortParam, filters } = body;
     const skip = ResponseUtilities.calculateSkip(currentPage, limit);
-    const match: FilterQuery<LeaveType> = {
+    const match: FilterQuery<CompanyLeaveType> = {
       isDeleted: false,
     };
 
@@ -86,7 +87,7 @@ export class LeaveTypeController {
       match['$or'] = [{ name: searchQuery }, { displayName: searchQuery }];
     }
 
-    const result = await this.leaveTypeService.aggregate([
+    const result = await this.companyLeaveTypeService.aggregate([
       {
         $match: match,
       },
@@ -108,15 +109,15 @@ export class LeaveTypeController {
   }
 
   @Post(PATH.details)
-  async detailsLeaveType(@Param('id') id: string) {
-    const leaveTypeData = await this.leaveTypeService.getLeaveType({
-      _id: new mongoose.Types.ObjectId(id),
-    });
-    if (!leaveTypeData) {
+  async detailsCompanyLeaveType(@Param('id') id: string) {
+    const companyLeaveTypeData =
+      await this.companyLeaveTypeService.getCompanyLeaveType({
+        _id: new mongoose.Types.ObjectId(id),
+      });
+    if (!companyLeaveTypeData) {
       return ResponseUtilities.responseWrapper(
         false,
-        COMMON_MESSAGE.NotFound.replace('{param}', 'Leave Type'),
-        404,
+        COMMON_MESSAGE.NotFound.replace('{param}', 'Company Leave Type'),
       );
     }
 
@@ -124,24 +125,27 @@ export class LeaveTypeController {
       true,
       COMMON_MESSAGE.Success,
       200,
-      leaveTypeData,
+      companyLeaveTypeData,
     );
   }
 
   @Post(PATH.edit)
   @UsePipes(new ValidationPipe())
-  async editLeaveType(
+  async editCompanyLeaveType(
     @Param('id') id: string,
-    @Body() data: EditLeaveTypeDto,
+    @Body() data: EditCompanyLeaveTypeDto,
     @Request() req,
   ) {
     const user = req.user;
     data.updatedBy = user?._id;
-    const updateData = await this.leaveTypeService.editLeaveType(id, data);
+    const updateData = await this.companyLeaveTypeService.editCompanyLeaveType(
+      id,
+      data,
+    );
     if (!updateData) {
       return ResponseUtilities.responseWrapper(
         false,
-        COMMON_MESSAGE.NotFound.replace('{param}', 'Leave Type'),
+        COMMON_MESSAGE.NotFound.replace('{param}', 'Company Leave Type'),
         404,
       );
     }
@@ -155,16 +159,14 @@ export class LeaveTypeController {
   }
 
   @Post(PATH.delete)
-  async deleteLeaveType(@Param('id') id: string, @Request() req) {
+  async deleteCompanyLeaveType(@Param('id') id: string, @Request() req) {
     const user = req.user;
-    const deleteLeaveType = await this.leaveTypeService.deleteLeaveType(
-      id,
-      user,
-    );
+    const deleteLeaveType =
+      await this.companyLeaveTypeService.deleteCompanyLeaveType(id, user);
     if (!deleteLeaveType) {
       return ResponseUtilities.responseWrapper(
         false,
-        COMMON_MESSAGE.NotFound.replace('{param}', 'Leave Type'),
+        COMMON_MESSAGE.NotFound.replace('{param}', 'Company Leave Type'),
         404,
       );
     }
@@ -178,7 +180,7 @@ export class LeaveTypeController {
   }
 
   @Post(PATH.changeStatus)
-  async changeStatusLeaveType(
+  async changeStatusCompanyLeaveType(
     @Param('id') id: string,
     @Body() data: any,
     @Request() req,
@@ -186,10 +188,8 @@ export class LeaveTypeController {
     const user = req?.user;
     data.updatedBy = user?._id;
 
-    const updateData = await this.leaveTypeService.changeStatusLeaveType(
-      id,
-      data,
-    );
+    const updateData =
+      await this.companyLeaveTypeService.changeStatusCompanyLeaveType(id, data);
     if (!updateData) {
       return ResponseUtilities.responseWrapper(
         false,
@@ -207,13 +207,12 @@ export class LeaveTypeController {
   }
 
   @Post(PATH.dropdown)
-  async dropdownLeaveType(@Request() req) {
-    const user = req?.user;
-    const allLeaveType = await this.leaveTypeService.getAllLeaveType({
-      companyId: new mongoose.Types.ObjectId(user?.companyId),
-      isActive: true,
-      isDeleted: false,
-    });
+  async dropdownCompanyLeaveType(@Request() req) {
+    const allLeaveType =
+      await this.companyLeaveTypeService.getAllCompanyLeaveType({
+        isActive: true,
+        isDeleted: false,
+      });
 
     return ResponseUtilities.responseWrapper(
       true,

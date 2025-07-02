@@ -10,7 +10,7 @@ import { DeparatmentModule } from './modules/department/department.module';
 import { DesignationModule } from './modules/designation/designation.module';
 import { PermissionModule } from './modules/permission/permission.module';
 import { UploadController } from './modules/upload/upload.controller';
-import { LeaveTypeModule } from './modules/leaveType/leaveType.module';
+import { LeaveTypeMasterModule } from './modules/leaveTypeMaster/leaveTypeMaster.module';
 import { EmployeeLeaveModule } from './modules/employeeLeave/employeeLeave.module';
 
 @Module({
@@ -35,7 +35,7 @@ import { EmployeeLeaveModule } from './modules/employeeLeave/employeeLeave.modul
     RoleModule,
     DeparatmentModule,
     DesignationModule,
-    LeaveTypeModule,
+    LeaveTypeMasterModule,
     EmployeeLeaveModule,
   ],
   controllers: [AppController, UploadController],

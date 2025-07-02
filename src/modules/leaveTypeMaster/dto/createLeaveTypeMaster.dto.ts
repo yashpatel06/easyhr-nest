@@ -16,9 +16,5 @@ export class CreateLeaveTypeDto {
 
   @IsMongoId()
   @IsOptional()
-  companyId?: string;
-
-  @IsMongoId()
-  @IsOptional()
   createdBy?: string;
 }

@@ -6,7 +6,7 @@ export class CreateEmployeeLeaveDto {
   userId?: string;
 
   @IsMongoId()
-  leaveTypeId?: string;
+  companyLeaveTypeId?: string;
 
   @IsString()
   startDate?: Date;

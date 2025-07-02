@@ -1,0 +1,72 @@
+[
+  {
+    "name": "casual_leave",
+    "displayName": "Casual Leave (CL)",
+    "description": "For personal or urgent matters. Usually short-duration."
+  },
+  {
+    "name": "sick_leave",
+    "displayName": "Sick Leave (SL)",
+    "description": "For health-related issues or medical conditions. Doctor certificate may be required if leave exceeds 2-3 days."
+  },
+  {
+    "name": "privilege_leave",
+    "displayName": "Privilege Leave (PL)",
+    "description": "For vacation or long leaves. Accumulated monthly or yearly."
+  },
+  {
+    "name": "leave_without_pay",
+    "displayName": "Leave Without Pay (LWP)",
+    "description": "Unpaid leave when no balance is left in other types."
+  },
+  {
+    "name": "maternity_leave",
+    "displayName": "Maternity Leave",
+    "description": "For female employees during childbirth. Typically up to 26 weeks as per Indian law."
+  },
+  {
+    "name": "paternity_leave",
+    "displayName": "Paternity Leave",
+    "description": "For male employees during child birth. Typically 7–15 days."
+  },
+  {
+    "name": "marriage_leave",
+    "displayName": "Marriage Leave",
+    "description": "Granted for employee's marriage. Often a one-time leave of 3–5 days."
+  },
+  {
+    "name": "bereavement_leave",
+    "displayName": "Bereavement Leave",
+    "description": "Leave due to death of an immediate family member."
+  },
+  {
+    "name": "comp_off",
+    "displayName": "Compensatory Off (Comp Off)",
+    "description": "Leave in exchange for working on weekends or public holidays. Attendance proof may be required."
+  },
+  {
+    "name": "half_day_leave",
+    "displayName": "Half-Day Leave",
+    "description": "For partial-day absence. Usually availed as part of CL or SL."
+  },
+  {
+    "name": "sabbatical_leave",
+    "displayName": "Sabbatical Leave",
+    "description": "Long-term leave for higher studies, research, or personal reasons. Subject to management approval."
+  },
+  {
+    "name": "study_leave",
+    "displayName": "Study Leave",
+    "description": "Leave for employees pursuing higher education, often granted conditionally."
+  },
+  {
+    "name": "festival_leave",
+    "displayName": "Festival Leave",
+    "description": "Optional leave for specific regional or religious festivals."
+  },
+  {
+    "name": "adoption_leave",
+    "displayName": "Adoption Leave",
+    "description": "Leave for adopting parents, similar to maternity or paternity leave in duration and policy."
+  }
+]

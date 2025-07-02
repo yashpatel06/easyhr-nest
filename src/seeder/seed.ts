@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import { seedPermissions } from './seed.service';
+import { seedLeaveType, seedPermissions } from './seed.service';
 
 async function runSeeders() {
   try {
@@ -11,6 +11,7 @@ async function runSeeders() {
 
     // all seeder
     await seedPermissions();
+    await seedLeaveType();
 
     console.log('🎉 All seeders finished');
 

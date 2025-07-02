@@ -2,8 +2,9 @@ import mongoose from 'mongoose';
 import { PermissionMasterSchema } from 'src/modules/permission/permission.schema';
 import { COLLECTIONS, EUserType } from 'src/utils/common';
 import * as permissions from 'src/seeder/permission.seed.json';
-import { UserSchema } from 'src/modules/user/user.schema';
+import * as leaveType from 'src/seeder/leaveType.seed.json';
 import { RoleMasterSchema } from 'src/modules/role/role.schema';
+import { LeaveTypeMasterSchema } from 'src/modules/leaveTypeMaster/leaveTypeMaster.schema';
 
 export async function seedPermissions() {
   try {
@@ -56,6 +57,33 @@ export async function seedPermissions() {
     console.log('🎉 Permission seeding completed.');
   } catch (err) {
     console.error('❌ Permission Seeding error:', err);
+    process.exit(1);
+  }
+}
+
+export async function seedLeaveType() {
+  try {
+    const LeaveTypeMasterModel = mongoose.model(
+      'LeaveTypeMaster',
+      LeaveTypeMasterSchema,
+      COLLECTIONS.LeaveTypeMaster,
+    );
+
+    for (const ele of leaveType) {
+      const exists = await LeaveTypeMasterModel.findOne({
+        name: ele.name,
+      });
+      if (!exists) {
+        await LeaveTypeMasterModel.create(ele);
+        // console.log(`✅ Inserted: ${permission.name}`);
+      } else {
+        // console.log(`⚠️ Already exists: ${permission.name}`);
+      }
+    }
+
+    console.log('🎉 LeaveType seeding completed.');
+  } catch (error) {
+    console.error('❌ LeaveType Seeding error:', error);
     process.exit(1);
   }
 }

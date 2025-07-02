@@ -6,7 +6,7 @@ import { AuthModule } from '../auth/auth.module';
 import { EmployeeLeaveService } from './employeeLeave.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { EmployeeLeaveController } from './employeeLeave.controller';
-import { LeaveTypeModule } from '../leaveType/leaveType.module';
+import { CompanyLeaveTypeModule } from '../companyLeaveType/companyLeaveType.module';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { LeaveTypeModule } from '../leaveType/leaveType.module';
       },
     ]),
     forwardRef(() => AuthModule),
-    forwardRef(() => LeaveTypeModule),
+    forwardRef(() => CompanyLeaveTypeModule),
   ],
   providers: [EmployeeLeaveService, AuthGuard],
   controllers: [EmployeeLeaveController],

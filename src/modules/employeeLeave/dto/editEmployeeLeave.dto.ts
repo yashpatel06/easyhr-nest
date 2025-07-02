@@ -3,7 +3,7 @@ import { IsDate, IsMongoId, IsOptional, IsString } from 'class-validator';
 export class EditEmployeeLeaveDto {
   @IsMongoId()
   @IsOptional()
-  leaveTypeId?: string;
+  companyLeaveTypeId?: string;
 
   @IsString()
   @IsOptional()

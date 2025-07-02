@@ -14,8 +14,8 @@ export class EmployeeLeave extends DbDefaultFields {
   @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.User })
   userId: MongooseSchema.Types.ObjectId;
 
-  @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.LeaveType })
-  leaveTypeId: MongooseSchema.Types.ObjectId;
+  @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.CompanyLeaveType })
+  companyLeaveTypeId: MongooseSchema.Types.ObjectId;
 
   @Prop()
   startDate: Date;

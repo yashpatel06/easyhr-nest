@@ -12,7 +12,8 @@ export const COLLECTIONS = {
   PermissionMaster: 'permission_master',
   Department: 'department',
   Designation: 'designation',
-  LeaveType: 'leave_type',
+  LeaveTypeMaster: 'leave_type_master',
+  CompanyLeaveType: 'company_leave_type',
   EmployeeLeave: 'employee_leave',
 };
 

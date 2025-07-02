@@ -19,9 +19,5 @@ export class EditLeaveTypeDto {
 
   @IsMongoId()
   @IsOptional()
-  companyId?: string;
-
-  @IsMongoId()
-  @IsOptional()
   updatedBy?: string;
 }
