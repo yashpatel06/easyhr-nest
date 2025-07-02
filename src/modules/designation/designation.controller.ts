@@ -47,7 +47,7 @@ export class DesignationContoller {
 
     const departmentData = await this.departmentService.getDepartment({
       _id: new mongoose.Types.ObjectId(data?.departmentId),
-      companyId: { $ne: new mongoose.Types.ObjectId(user?.companyId) },
+      companyId: { $eq: new mongoose.Types.ObjectId(user?.companyId) },
       isActive: true,
       isDeleted: false,
     });

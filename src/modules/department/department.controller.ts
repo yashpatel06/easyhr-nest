@@ -40,7 +40,7 @@ export class DepartmentContoller {
     const user = req?.user;
     const oldData = await this.departmentService.getDepartment({
       name: data?.name,
-      companyId: { $ne: new mongoose.Types.ObjectId(user?.companyId) },
+      companyId: { $eq: new mongoose.Types.ObjectId(user?.companyId) },
       // isActive: true,
       isDeleted: false,
     });

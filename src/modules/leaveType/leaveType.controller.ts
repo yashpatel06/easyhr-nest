@@ -40,13 +40,14 @@ export class LeaveTypeController {
   async createLeaveType(@Body() data: CreateLeaveTypeDto, @Request() req) {
     const user = req.user;
     const companyId = user?.companyId;
-
+    console.log('companyId', companyId);
     const oldData = await this.leaveTypeService.getLeaveType({
       name: data?.name,
-      companyId: { $ne: new mongoose.Types.ObjectId(companyId) },
+      companyId: { $eq: new mongoose.Types.ObjectId(companyId) },
       // isActive: true,
       isDeleted: false,
     });
+    console.log('oldData', oldData);
     if (oldData) {
       return ResponseUtilities.responseWrapper(
         false,
