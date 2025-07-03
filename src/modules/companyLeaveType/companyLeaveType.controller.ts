@@ -58,6 +58,7 @@ export class CompanyLeaveTypeController {
     }
 
     data.createdBy = user?._id;
+    data.companyId = user?.companyId;
     const leaveTypeData =
       await this.companyLeaveTypeService.createCompanyLeaveType(data);
 
