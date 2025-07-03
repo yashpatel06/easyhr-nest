@@ -139,8 +139,8 @@ export class EmployeeLeaveController {
       { $match: match },
       {
         $lookup: {
-          from: COLLECTIONS.LeaveTypeMaster,
-          localField: 'leaveTypeId',
+          from: COLLECTIONS.CompanyLeaveType,
+          localField: 'companyLeaveTypeId',
           foreignField: '_id',
           as: 'leaveType',
           pipeline: [{ $project: { name: 1, displayName: 1 } }],
