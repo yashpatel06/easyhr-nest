@@ -44,8 +44,11 @@ export class CompanyLeaveTypeController {
     const user = req?.user;
 
     const oldData = await this.companyLeaveTypeService.getCompanyLeaveType({
-      name: data?.name,
+      // name: data?.name,
       companyId: { $eq: new mongoose.Types.ObjectId(user?.companyId) },
+      leaveTypeMasterId: {
+        $eq: new mongoose.Types.ObjectId(data?.leaveTypeMasterId),
+      },
       // isActive: true,
       isDeleted: false,
     });
