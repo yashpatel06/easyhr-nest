@@ -33,7 +33,7 @@ export class CreateCompanyLeaveTypeDto {
 
   @IsBoolean()
   @IsOptional()
-  isCahsable?: boolean;
+  isCashable?: boolean;
 
   @IsBoolean()
   @IsOptional()

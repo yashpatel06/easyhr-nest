@@ -37,7 +37,7 @@ export class EditCompanyLeaveTypeDto {
 
   @IsBoolean()
   @IsOptional()
-  isCahsable?: boolean;
+  isCashable?: boolean;
 
   @IsBoolean()
   @IsOptional()

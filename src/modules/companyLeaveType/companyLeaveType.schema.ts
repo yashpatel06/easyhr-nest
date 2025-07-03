@@ -30,7 +30,7 @@ export class CompanyLeaveType extends DbDefaultFields {
   isCarryForword: boolean;
 
   @Prop({ type: Boolean, default: false })
-  isCahsable: boolean;
+  isCashable: boolean;
 
   @Prop({ type: Boolean, default: false })
   isRequiredProof: boolean;
