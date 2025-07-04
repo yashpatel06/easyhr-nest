@@ -35,6 +35,9 @@ export class EmployeeLeave extends DbDefaultFields {
   @Prop({ type: mongoose.Schema.ObjectId, ref: COLLECTIONS.User })
   actionBy: MongooseSchema.Types.ObjectId;
 
+  @Prop()
+  rejectedReason: string;
+
   @Prop({ type: String, enum: ELeaveDayType })
   dayType: string;
 

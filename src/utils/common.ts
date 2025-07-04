@@ -33,6 +33,7 @@ export enum ELeaveStatus {
   Pending = 'Pending',
   Approved = 'Approved',
   Cancelled = 'Cancelled',
+  rejected = 'Rejected',
 }
 
 export enum ELeaveDayType {
