@@ -28,6 +28,7 @@ enum PATH {
   details = 'details/:id',
   delete = 'delete/:id',
   action = 'action/:id',
+  listAll = 'list/all',
 }
 
 @UseGuards(AuthGuard)
@@ -283,6 +284,33 @@ export class EmployeeLeaveController {
       COMMON_MESSAGE.Success,
       200,
       actionData,
+    );
+  }
+
+  @Post(PATH.listAll)
+  async allEmployeeLeave(@Body() body: ListFilterDto, @Request() req) {
+    const user = req?.user;
+
+    const { currentPage, limit, search, sortOrder, sortParam } = body;
+    const skip = ResponseUtilities.calculateSkip(currentPage, limit);
+
+    const result = await this.employeeLeaveService.getAllEmployeeLeave(
+      user?.companyId,
+      skip,
+      body,
+    );
+
+    const data = ResponseUtilities.formatPaginatedResponse(
+      result,
+      currentPage,
+      limit,
+    );
+
+    return ResponseUtilities.responseWrapper(
+      true,
+      COMMON_MESSAGE.Success,
+      200,
+      data,
     );
   }
 }

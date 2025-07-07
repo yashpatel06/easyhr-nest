@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, PipelineStage } from 'mongoose';
+import mongoose, { Model, PipelineStage } from 'mongoose';
 import { COLLECTIONS } from 'src/utils/common';
 import { EmployeeLeave } from './employeeLeave.schema';
 import { CreateEmployeeLeaveDto } from './dto/createEmployeeLeave.dto';
 import { EditEmployeeLeaveDto } from './dto/editEmployeeLeave.dto';
+import { ListFilterDto } from 'src/utils/listFilter.dto';
+import { ResponseUtilities } from 'src/utils/response.util';
 
 @Injectable()
 export class EmployeeLeaveService {
@@ -43,5 +45,59 @@ export class EmployeeLeaveService {
 
   async aggregate(pipeline: PipelineStage[]) {
     return this.employeeLeaveModel.aggregate(pipeline);
+  }
+
+  async getAllEmployeeLeave(
+    companyId: string,
+    skip: number,
+    data: ListFilterDto,
+  ) {
+    return this.employeeLeaveModel.aggregate([
+      {
+        $match: {
+          isActive: true,
+          isDeleted: false,
+          // companyId: new mongoose.Types.ObjectId(companyId),
+        },
+      },
+      {
+        $lookup: {
+          from: COLLECTIONS.CompanyLeaveType,
+          localField: 'companyLeaveTypeId',
+          foreignField: '_id',
+          as: 'leaveType',
+          pipeline: [{ $project: { name: 1, displayName: 1 } }],
+        },
+      },
+      {
+        $unwind: '$leaveType',
+      },
+      {
+        $lookup: {
+          from: COLLECTIONS.User,
+          localField: 'actionBy',
+          foreignField: '_id',
+          as: 'actionBy',
+          pipeline: [{ $project: { firstName: 1, lastName: 1 } }],
+        },
+      },
+      {
+        $unwind: { path: '$actionBy', preserveNullAndEmptyArrays: true },
+      },
+      {
+        $lookup: {
+          from: COLLECTIONS.User,
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+          pipeline: [{ $project: { firstName: 1, lastName: 1 } }],
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      { $sort: { [data?.sortParam]: data?.sortOrder } },
+      ...ResponseUtilities.facetStage(skip, data?.limit),
+    ]);
   }
 }
