@@ -291,17 +291,25 @@ export class EmployeeLeaveController {
   async listAllEmployeeLeave(@Body() body: ListFilterDto, @Request() req) {
     const user = req?.user;
 
-    const { currentPage, limit, search, sortOrder, sortParam } = body;
+    const { currentPage, limit, search, sortOrder, sortParam, filters } = body;
     const skip = ResponseUtilities.calculateSkip(currentPage, limit);
 
+    const match: FilterQuery<any> = {
+      isActive: true,
+      isDeleted: false,
+      companyId: new mongoose.Types.ObjectId(user?.companyId),
+    };
+
+    if (filters?.employeeId) {
+      match.userId = new mongoose.Types.ObjectId(filters?.employeeId);
+    }
+
+    if (filters?.status) {
+      match.status = filters?.status;
+    }
+
     const result = await this.employeeLeaveService.aggregate([
-      {
-        $match: {
-          isActive: true,
-          isDeleted: false,
-          companyId: new mongoose.Types.ObjectId(user?.companyId),
-        },
-      },
+      { $match: match },
       {
         $lookup: {
           from: COLLECTIONS.User,
