@@ -1,5 +1,6 @@
 import {
   IsArray,
+  IsBoolean,
   IsEmail,
   IsMongoId,
   IsNotEmpty,
@@ -146,6 +147,10 @@ export class EditUserDto {
   @IsMongoId({ each: true })
   @IsOptional()
   projectManager?: string[];
+
+  @IsBoolean()
+  @IsOptional()
+  isAdmin?: boolean;
 
   @IsMongoId()
   @IsOptional()

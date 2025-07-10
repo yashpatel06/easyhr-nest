@@ -35,6 +35,7 @@ enum PATH {
   edit = 'edit/:id',
   delete = 'delete/:id',
   changeStatus = 'change-status/:id',
+  assignUserDropdown = 'assign-user/dropdown',
 }
 
 @UseGuards(AuthGuard)
@@ -111,6 +112,7 @@ export class UsersController {
     const skip = ResponseUtilities.calculateSkip(currentPage, limit);
     const match: FilterQuery<User> = {
       isDeleted: false,
+      isAdmin: false,
     };
 
     if (user?.userType === EUserType.Client) {
@@ -323,6 +325,63 @@ export class UsersController {
       COMMON_MESSAGE.Success,
       200,
       updateData,
+    );
+  }
+
+  @Post(PATH.assignUserDropdown)
+  async assignUserDropdown(@Request() req) {
+    const user = req?.user;
+
+    const userList = await this.userService.aggregate([
+      {
+        $match: {
+          companyId: new mongoose.Types.ObjectId(user?.companyId),
+          isActive: true,
+          isDeleted: false,
+        },
+      },
+      {
+        $lookup: {
+          from: COLLECTIONS.RoleMaster,
+          let: { roleId: '$roleId' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$_id', '$$roleId'] },
+                    {
+                      $ne: [{ $toLower: '$name' }, 'employee'],
+                    },
+                  ],
+                },
+              },
+            },
+            {
+              $project: { _id: 1 }, // Only fetch _id since we only need to check existence
+            },
+          ],
+          as: 'role',
+        },
+      },
+      {
+        $match: {
+          'role.0': { $exists: true },
+        },
+      },
+      {
+        $project: {
+          firstName: 1,
+          lastName: 1,
+        },
+      },
+    ]);
+
+    return ResponseUtilities.responseWrapper(
+      true,
+      COMMON_MESSAGE.Success,
+      200,
+      userList,
     );
   }
 }

@@ -111,6 +111,9 @@ export class User extends DbDefaultFields {
 
   @Prop({ type: [mongoose.Schema.ObjectId], ref: COLLECTIONS.User })
   projectManager: MongooseSchema.Types.ObjectId[];
+
+  @Prop({type: Boolean, default: false})
+  isAdmin: boolean
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

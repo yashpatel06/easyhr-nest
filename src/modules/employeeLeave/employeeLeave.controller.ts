@@ -28,7 +28,7 @@ enum PATH {
   details = 'details/:id',
   delete = 'delete/:id',
   action = 'action/:id',
-  listAll = 'list/all',
+  allEmployeeList = 'all-employee/list',
 }
 
 @UseGuards(AuthGuard)
@@ -287,18 +287,62 @@ export class EmployeeLeaveController {
     );
   }
 
-  @Post(PATH.listAll)
-  async allEmployeeLeave(@Body() body: ListFilterDto, @Request() req) {
+  @Post(PATH.allEmployeeList)
+  async listAllEmployeeLeave(@Body() body: ListFilterDto, @Request() req) {
     const user = req?.user;
 
     const { currentPage, limit, search, sortOrder, sortParam } = body;
     const skip = ResponseUtilities.calculateSkip(currentPage, limit);
 
-    const result = await this.employeeLeaveService.getAllEmployeeLeave(
-      user?.companyId,
-      skip,
-      body,
-    );
+    const result = await this.employeeLeaveService.aggregate([
+      {
+        $match: {
+          isActive: true,
+          isDeleted: false,
+          companyId: new mongoose.Types.ObjectId(user?.companyId),
+        },
+      },
+      {
+        $lookup: {
+          from: COLLECTIONS.User,
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+          pipeline: [
+            { $match: { isActive: true, isDeleted: false } },
+            { $project: { firstName: 1, lastName: 1, reportingManager: 1 } },
+          ],
+        },
+      },
+      { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
+      {
+        $match: {
+          'user.reportingManager': new mongoose.Types.ObjectId(user?._id),
+        },
+      },
+      {
+        $lookup: {
+          from: COLLECTIONS.CompanyLeaveType,
+          localField: 'companyLeaveTypeId',
+          foreignField: '_id',
+          as: 'leaveType',
+          pipeline: [{ $project: { name: 1, displayName: 1 } }],
+        },
+      },
+      { $unwind: { path: '$leaveType', preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: {
+          from: COLLECTIONS.User,
+          localField: 'actionBy',
+          foreignField: '_id',
+          as: 'actionBy',
+          pipeline: [{ $project: { firstName: 1, lastName: 1 } }],
+        },
+      },
+      { $unwind: { path: '$actionBy', preserveNullAndEmptyArrays: true } },
+      { $sort: { [sortParam]: sortOrder } },
+      ...ResponseUtilities.facetStage(skip, limit),
+    ]);
 
     const data = ResponseUtilities.formatPaginatedResponse(
       result,
